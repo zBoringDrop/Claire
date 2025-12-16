@@ -1,0 +1,64 @@
+<div class="w-full flex flex-col p-7 bg-dark-matter border border-soma-dark2 rounded-2xl text-accent-foreground text-wrap">
+    <div class="flex flex-row justify-start items-center-safe gap-3">
+        <div class="rounded-full w-10 h-10 bg-pink-600 flex justify-center-safe items-center-safe">
+            <p>2</p>
+        </div>
+        <div class="felx flex-col">
+            <p class="text-md">Select analysis category</p>
+            <p class="text-xs">You can choose multiple values</p>
+        </div>
+    </div>
+
+    @let categories = categoriesList();
+
+    @if (!isLoading()) {
+        @if (categories && categories.length > 0) {
+            <div class="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10 overflow-y-auto w-full max-h-120">
+                @for (category of categories; let i = $index; track category.id) {
+                    @let defCategory = getDefaultCategory(category.type);
+                    
+                    <label
+                        class="h-fit cursor-pointer rounded-xl border-soma-dark2 border text-accent-foreground transition-colors duration-200 ease-out"
+                        [ngClass]="[
+                            defCategory?.hasCheckedBorder ?? 'has-checked:border-soma-purple'
+                        ]"
+                        >
+                        <input type="checkbox" [formControl]="asControl(i)" [value]="category.type" class="hidden" />
+                        <app-category-card [category]="category" [defCategory]="defCategory"></app-category-card>
+                    </label>
+                }
+            </div>
+        } @else {
+            <p class="text-accent-foreground">No categories found</p>
+        }
+    } @else {
+        <div class="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10 overflow-y-auto w-full max-h-120">
+            <app-category-card [category]="null" [defCategory]="null"></app-category-card>
+            <app-category-card [category]="null" [defCategory]="null"></app-category-card>
+            <app-category-card [category]="null" [defCategory]="null"></app-category-card>
+        </div>
+    }
+
+    @let selectedNames = getSelectedCategoryNames(getSelectedCategories());
+
+    @if (selectedNames.length > 2) {
+        <div class="mt-5 p-2 bg-red-500/40 border border-red-400 rounded-xl">
+            <p class="text-sm"><span class="font-bold">Warning:</span> Selecting too many analysis categories, especially for longer code (es. +50 lines), may slow down the analysis and increase system resource usage</p>
+        </div>
+    }
+
+    <div class="flex flex-row flex-wrap gap-1 items-center-safe text-sm mt-5 p-2 bg-soma-dark/20 border border-soma-purple rounded-xl wrap-break-word">
+        @if (selectedNames.length > 0) {
+            <p>Selected: </p>
+            @for (catName of selectedNames; track catName) {
+                <div class="border border-soma-dark rounded-md px-2 py-0.5 bg-soma-purple/10 hover:bg-soma-purple/30 hover:border-soma-purple cursor-default transition-colors duration-200 ease-out">
+                    <p class="font-bold">{{ catName | removeUnderscore | titlecase }}</p>
+                </div>
+            }
+        }
+        @else {
+            <p>You have to select at least one category analysis</p>
+        }
+    </div>
+
+</div>

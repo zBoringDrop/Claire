@@ -1,0 +1,367 @@
+@if (notFound()) {
+    <app-resource-not-found [notFoundCategory]="notFoundCategory" [id]="analysisId"></app-resource-not-found>
+} @else {
+
+    @if (showDeleteDialog()) {
+        <app-confirmation-dialog (dialogClose)="onDialogResponse($event)" [idToRemove]="analysis()?.id" [resource]="'Analysis'"></app-confirmation-dialog>
+    }
+
+    <section class="w-full max-w-7xl mx-auto text-xs flex flex-col justify-center-safe items-center-safe p-10 gap-7">
+        
+        <div class="flex flex-col w-full bg-dark-matter-light/40 p-5 border rounded-xl border-soma-purple gap-3">
+            
+            <div class="w-full flex flex-row justify-items-center-safe items-center-safe">
+                <div class="w-full flex flex-row justify-start justify-items-center-safe items-center-safe">
+                    <button (click)="navigateToHistory()" title="Back to history" class="w-6 h-6 hover:bg-soma-dark text-center rounded-md">
+                        <i class="fi fi-rr-arrow-small-left text-lg text-accent-foreground"></i>
+                    </button>
+                </div>
+
+                @if (analysis() && !inProgress(analysis()!.status)) {
+                    <div class="w-full flex flex-row justify-end-safe justify-items-center-safe items-center-safe gap-3">
+                        @if (file() && !file()!.deleted) {
+                            <button (click)="reAnalyze()" title="Re-Analyze analysis" class="w-7 h-7 hover:bg-myelin-gold/20 text-center rounded-md">
+                                <i class="fi fi-rr-file-medical-alt text-lg text-myelin-gold"></i>
+                            </button>
+                        }
+                        <button (click)="openDeleteAnalysisDialog()" title="Delete analysis" class="w-7 h-7 hover:bg-red-400/20 text-center rounded-md">
+                            <i class="fi fi-rr-trash text-lg text-red-400"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+
+            @let analyzedCode = file()?.data ?? snippet()?.code_text;
+
+            @if (file() || snippet()) {        
+                <div class="flex flex-row items-center-safe justify-items-center-safe gap-5">
+                    <i class="fi text-4xl text-accent-foreground"
+                        [ngClass]="file() ? 'fi-rr-clip-file' : 'fi-rr-code-simple'"
+                    ></i>
+                    <div class="flex flex-col text-accent-foreground gap-2">
+                        <div class="flex flex-row text-xl gap-2 justify-items-center-safe items-center-safe">
+                            
+                            @let statusConfig = getStatusConfig(analysis()?.status);
+
+                            <div class="pt-0.5 pb-0.5 pl-2 pr-2 text-xs rounded-md border flex items-center gap-2 w-fit transition-colors duration-300"
+                                [ngClass]="[
+                                    statusConfig?.bgClass || 'bg-soma-dark2',
+                                    statusConfig?.borderClass || 'border-soma-dark2',
+                                    statusConfig?.textClass || 'text-gray-300'
+                                ]">
+                                
+                                @if (statusConfig?.icon) {
+                                    <i class="fi text-xs flex items-center" 
+                                        [ngClass]="[statusConfig?.icon, statusConfig?.iconClass]">
+                                    </i>
+                                }
+
+                                <span class="font-bold">
+                                    {{ statusConfig?.label || analysis()?.status }}
+                                </span>
+
+                            </div>
+
+                            <div title="Source details" (click)="navigateToSource()" class="flex flex-row items-center justify-center gap-2 cursor-pointer">
+                                <p class="pt-0.5 pb-0.5 pl-2 pr-2 text-xs text-gray-300 rounded-md border border-soma-purple bg-soma-dark2 hover:bg-soma-dark transition-all">File</p>
+                                @if (file()?.deleted || snippet()?.deleted) {
+                                    <p title="You have deleted this source" class="font-bold text-red-400 animate-pulse">{{ file()?.filename ?? snippet()?.title }}</p>
+                                } @else {
+                                    <p class="font-bold">{{ file()?.filename ?? snippet()?.title }}</p>
+                                }
+                            </div>
+                        </div>
+
+                        @if (file()) {
+                            <div class="w-full flex flex-col sm:flex-row gap-3 justify-items-start items-center-safe">
+                                <div class="flex flex-row justify-items-center-safe items-center-safe gap-2 text-gray-400">
+                                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1">
+                                        <i class="fi fi-rr-binary text-xs"></i>
+                                        <span>{{ file()!.language | removeUnderscore | titlecase }}</span>
+                                    </div>
+                                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1">
+                                        <i class="fi fi-rr-text text-xs"></i>
+                                        <span>{{ file()?.content_type }}</span>
+                                    </div>
+                                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1">
+                                        <i class="fi fi-rr-sd-card text-xs"></i>
+                                        <span>{{ file()?.size }} B</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        } @else {
+                            <div class="w-full flex flex-col sm:flex-row gap-3 justify-items-start items-center-safe">
+                                <div class="flex flex-row justify-items-center-safe items-center-safe gap-2 text-gray-400">
+                                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1">
+                                        <i class="fi fi-rr-binary text-xs"></i>
+                                        <span>{{ snippet()!.language | removeUnderscore | titlecase  }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (analysis() && analysis()?.created_at != null) {}
+                        <div class="w-full flex flex-col sm:flex-row gap-3 justify-items-start items-center-safe">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe gap-1.5 text-gray-400">
+                                <i class="fi fi-rr-clock text-xs"></i>
+                                <span>{{ analysis()?.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+            
+        </div>
+
+        @if (analysis() != null && inProgress(analysis()!.status)) {
+            <div class="w-full p-3 flex flex-col text-accent-foreground justify-items-start items-start rounded-xl border bg-myelin-gold/20 border-myelin-gold/20 hover:border-myelin-gold transition-colors duration-200 ease-out">
+                <div class="flex flex-row gap-2.5 justify-items-center-safe items-center-safe">
+                    <i class="fi fi-rr-bolt text-lg text-myelin-gold p-4 bg-myelin-gold/30 rounded-xl border border-myelin-gold animate-pulse"></i>
+                    <div class="flex flex-col gap-1">
+                        <p class="font-bold text-lg">The AI is still analyzing your code</p>
+                        <p>You’ll see the results as soon as they’re ready</p>
+                        
+                        <div class="flex flex-row gap-1">
+                            <p>Status:</p>
+                            <p class="font-bold animate-pulse">{{ analysis()?.message }} </p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        }
+
+        @if (analysis() != null && analysis()!.status === ANALYSIS_STATUS.FAILED) {
+            <div class="w-full p-3 flex flex-col text-accent-foreground justify-items-start items-start rounded-xl border bg-red-500/20 border-red-500/20 hover:bg-red-500/30 transition-colors duration-200 ease-out">
+                <div class="flex flex-row gap-2.5 justify-items-center-safe items-center-safe">
+                    <i class="fi fi-rr-wine-glass-crack text-lg text-red-500 p-4 bg-red-500/30 rounded-xl border border-red-500 animate-pulse"></i>
+                    <div class="flex flex-col gap-1">
+                        <p class="font-bold text-lg">The analysis could not be completed. </p>
+                        <p>Some details (file, code snippet, or results) may not be available for this record.</p>
+                        
+                        <div class="flex flex-row gap-1">
+                            <p>Error:</p>
+                            <p class="font-bold">{{ analysis()?.message }} </p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        }
+
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+
+            <div class="flex flex-col items-center-safe justify-items-center-safe p-5 bg-cell-membrane border border-soma-purple hover:border-orange-400 hover:bg-orange-400/20 rounded-xl transition-colors duration-200 ease-out">
+                <div class="flex flex-row items-center-safe justify-items-center-safe text-accent-foreground gap-3">
+                    <i class="fi fi-rr-bullseye text-3xl text-orange-400"></i>
+                    <p class="text-sm">Score</p>
+                </div>
+                @if (analysis()?.overall_severity != null) {
+                    <p class="text-xl text-accent-foreground font-bold"> {{ analysis()?.overall_severity }}/5</p>
+                } @else {
+                    <app-loading-data></app-loading-data>
+                }
+            </div>
+            <div class="flex flex-col items-center-safe justify-items-center-safe p-5 bg-cell-membrane border border-soma-purple hover:border-red-400 hover:bg-red-400/20 rounded-xl transition-colors duration-200 ease-out">
+                <div class="flex flex-row items-center-safe justify-items-center-safe text-accent-foreground gap-3">
+                    <i class="fi fi-rr-exclamation text-3xl text-red-400"></i>
+                    <p class="text-sm">Total issues</p>
+                </div>
+                @if (analysis()?.issues_count != null) {
+                    <p class="text-xl text-accent-foreground font-bold">{{ analysis()?.issues_count }}</p>
+                } @else {
+                    <app-loading-data></app-loading-data>
+                }
+            </div>
+            <div class="flex flex-col items-center-safe justify-items-center-safe p-5 bg-cell-membrane border border-soma-purple hover:border-blue-400 hover:bg-blue-400/20 rounded-xl transition-colors duration-200 ease-out">
+                <div class="flex flex-row items-center-safe justify-items-center-safe text-accent-foreground gap-3">
+                    <i class="fi fi-rr-category text-3xl text-blue-400"></i>
+                    <p class="text-sm">Categories</p>
+                </div>
+                @if (analysis()?.analysis_categoryIds != null) {
+                    <p class="text-xl text-accent-foreground font-bold">{{ analysis()?.analysis_categoryIds?.length }}</p>
+                } @else {
+                    <app-loading-data></app-loading-data>
+                }
+            </div>
+            <div class="flex flex-col items-center-safe justify-items-center-safe p-5 bg-cell-membrane border border-soma-purple hover:border-emerald-400 hover:bg-emerald-400/20 rounded-xl transition-colors duration-200 ease-out">
+                <div class="flex flex-row items-center-safe justify-items-center-safe text-accent-foreground gap-3">
+                    <i class="fi fi-rr-stopwatch text-3xl text-emerald-400"></i>
+                    <p class="text-sm">Total time</p>
+                </div>
+                @if (analysis()?.execution_ms != null) {
+                    <p class="text-xl text-accent-foreground font-bold">{{ msToSeconds(analysis()!.execution_ms) }}s</p>
+                } @else {
+                    <app-loading-data></app-loading-data>
+                }
+            </div>
+
+        </div>
+
+        @if (tool()) {
+            <div class="w-full flex flex-col justify-items-start items-start gap-3">
+                <p class="text-accent-foreground text-lg">AI model used</p>
+
+                <div class="w-full">
+                    <app-ai-model-card [aiTool]="tool()" [providerSection]="true"></app-ai-model-card>
+                </div>
+            </div>
+        }
+
+        @let modelConfig = analysis()?.result_json?.configuration;
+        @if (modelConfig && tool()?.provider_name?.toLocaleLowerCase()?.includes('ollama')) {
+            <div class="w-full flex flex-col justify-items-start items-start gap-3">
+                <p class="text-accent-foreground text-lg">Model configuration</p>
+
+                <div class="w-full">
+                    <app-ollama-used-config [config]="modelConfig"></app-ollama-used-config>
+                </div>
+            </div>
+        }
+
+        <div class="w-full">
+            <app-code-viewer [code]="analyzedCode"></app-code-viewer>
+        </div>
+
+        <div class="w-full flex flex-col justify-items-start items-start gap-3 bg-soma-dark2/20 p-3 rounded-xl">
+            <p class="text-accent-foreground text-lg">Analyzed categories</p>
+
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
+
+                @if (analysis() && analysis()?.result_json != null && analysis()?.result_json?.results != null) {
+                    @for (result of analysis()?.result_json?.results; track result.meta.category; let i = $index) {
+
+                        @let defCategory = getDefaultCategory(result.meta.category);
+                        <app-category-analysis-card 
+                            [analysisStatus]="analysis()!.status"
+                            [defCategory]="defCategory" 
+                            [result]="result"
+                            [i]="i"
+                            [selectedCategoryIndex]="selectedCategoryIndex"
+                            (loadCategoryAnalysis)="loadCategoryAnalysis($event)"
+                            >
+                        </app-category-analysis-card>
+                    }
+                } @else {
+                    <app-category-analysis-card [result]="undefined"></app-category-analysis-card>
+                    <app-category-analysis-card [result]="undefined"></app-category-analysis-card>
+                    <app-category-analysis-card [result]="undefined"></app-category-analysis-card>
+                }
+
+            </div>
+
+            
+            @let analysisCatRes = (analysis()?.result_json?.results && selectedCategoryIndex() >= 0) 
+                            ? analysis()!.result_json.results[selectedCategoryIndex()] 
+                            : null;
+
+            @if (analysisCatRes) {
+                @let defCategory = getDefaultCategory(analysisCatRes.meta.category);
+
+                <div class="w-full flex flex-col justify-items-start items-start gap-3 mt-3">
+                    
+                    <div class="flex flex-row gap-2 justify-items-center-safe items-center-safe">
+                        <p class="text-accent-foreground text-lg">Details about category</p>
+                        <span class="text-accent-foreground text-lg font-bold">{{ analysisCatRes.meta.category | removeUnderscore }}</span>
+                        <i class="fi text-xl"
+                            [ngClass]="[defCategory?.icon ?? 'fi-rr-shield',
+                                defCategory?.color ?? 'text-emerald-500'
+                            ]"></i>
+                    </div>
+
+                    <div class="flex flex-col w-full items-center-safe justify-items-center-safe">
+                        <div class="flex flex-col w-full p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-blue-400 hover:bg-blue-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-poll-h text-xl text-blue-400"></i>
+                                <p class="text-sm">Prompt</p>
+                            </div>
+                            <div class="overflow-y-auto max-h-50 whitespace-pre-wrap">
+                                <p class="text-sm text-accent-foreground">{{ analysisCatRes.meta.prompt }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-2">
+
+                        <div class="flex flex-col p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-orange-400 hover:bg-orange-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-bullseye text-xl text-orange-400"></i>
+                                <p class="text-sm">Score</p>
+                            </div>
+                            <p class="text-sm text-accent-foreground font-bold">{{ analysisCatRes.response.overall_severity }}/5</p>
+                        </div>
+
+                        <div class="flex flex-col p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-red-400 hover:bg-red-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-exclamation text-xl text-red-400"></i>
+                                <p class="text-sm">Issues</p>
+                            </div>
+                            <p class="text-sm text-accent-foreground font-bold">{{ analysisCatRes.response.issues.length }}</p>
+                        </div>
+
+                        <div class="flex flex-col p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-emerald-400 hover:bg-emerald-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-clock text-xl text-emerald-400"></i>
+                                <p class="text-sm">Start time</p>
+                            </div>
+                            <p class="text-sm text-accent-foreground font-bold">{{ analysisCatRes.meta.start_datetime | date:'dd/MM/yyyy HH:mm' }}</p>
+                        </div>
+
+                        <div class="flex flex-col p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-emerald-400 hover:bg-emerald-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-clock-three text-xl text-emerald-400"></i>
+                                <p class="text-sm">End time</p>
+                            </div>
+                            <p class="text-sm text-accent-foreground font-bold">{{ analysisCatRes.meta.end_datetime | date:'dd/MM/yyyy HH:mm' }}</p>
+                        </div>
+
+                        <div class="flex flex-col p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-emerald-400 hover:bg-emerald-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-stopwatch text-xl text-emerald-400"></i>
+                                <p class="text-sm">Duration</p>
+                            </div>
+                            <p class="text-sm text-accent-foreground font-bold">{{ msToSeconds(analysisCatRes.meta.execution_ms) }}s</p>
+                        </div>
+
+                        <div class="flex flex-col p-5 gap-2 bg-cell-membrane border border-soma-purple hover:border-yellow-400 hover:bg-yellow-400/20 rounded-xl transition-colors duration-200 ease-out">
+                            <div class="flex flex-row justify-items-center-safe items-center-safe text-accent-foreground gap-3">
+                                <i class="fi fi-rr-align-center text-xl text-yellow-400"></i>
+                                <p class="text-sm">Output length</p>
+                            </div>
+                            <p class="text-sm text-accent-foreground font-bold">{{ analysisCatRes.output_length }} chars</p>
+                        </div>
+                    </div>
+            
+                </div>
+            
+                @let issues = analysisCatRes.response.issues;
+
+                @if (issues && issues.length > 0) {
+                    <div class="w-full flex flex-col gap-3">
+                        <p class="text-lg text-accent-foreground">Issues</p>
+                        @for (issue of issues; track i; let i = $index) {
+                            <app-category-issue-card [i]="i" [issue]="issue"></app-category-issue-card>
+                        }
+                    </div>
+                } @else {
+                    <div class="w-full flex flex-col p-5 items-center-safe justify-center-safe">
+                        <p class="text-accent-foreground">No issues found</p>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="w-full flex flex-col justify-items-start items-start gap-3 bg-soma-dark2/20 p-3 rounded-xl">
+            <p class="text-accent-foreground text-lg">Technical Details</p>
+            
+            <app-analysis-debug-details [analysis]="analysis()"></app-analysis-debug-details>
+
+        </div>
+
+
+    </section>
+}
+
+

@@ -1,0 +1,19 @@
+@let programmingLanguages = programmingLanguagesList();
+
+<select class="w-full" (change)="onLanguageChange($event)">
+  @for (language of programmingLanguages; track language.id) {
+    <option
+      [value]="language.id"
+      [selected]="
+        (normalizedLanguageInfo != null && normalizedLanguageInfo !== '' &&
+        normalizedLanguageInfo.length > 0 &&
+        language.name.includes(normalizedLanguageInfo)) ||
+        language.name.toLowerCase().includes('pseudo')
+        "
+        class="bg-cell-membrane text-accent-foreground"
+    >
+
+      {{ language.name | removeUnderscore | titlecase }}
+    </option>
+  }
+</select>

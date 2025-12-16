@@ -1,0 +1,29 @@
+<div class="flex flex-col p-2 gap-2 text-sm text-accent-foreground bg-cell-membrane rounded-lg">
+
+    @for (group of GROUPS; track group.title) {
+        <div class="flex flex-col gap-2 bg-dark-matter p-2 rounded-lg hover:bg-dark-matter/20 hover:border-soma-purple transition-colors duration-200 ease-out">
+            
+            <div class="flex flex-row gap-2 items-center">
+                <i [class]="group.icon"></i>
+                <p class="font-bold text-gray-200">{{ group.title }}</p>
+            </div>
+        
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+
+                @for (key of group.keys; track key) {
+                    <div [title]="$any(OPTIONS)[key].description" class="flex flex-row text-xs gap-1.5 overflow-hidden">
+                        <span class="text-gray-500 whitespace-nowrap">
+                            {{ $any(OPTIONS)[key].label }}:
+                        </span>
+                        <span class="truncate font-mono text-gray-300">
+                            {{ $any(config)?.[key] ?? 'N/A' }}
+                        </span>
+                    </div>
+                }
+
+            </div>
+        
+        </div>
+    }
+
+</div>

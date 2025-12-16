@@ -1,0 +1,82 @@
+<div class="w-full p-3 flex flex-col text-gray-300 justify-items-start items-start gap-3 rounded-xl border bg-gray-500/20 border-gray-500/20 hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+    <div class="flex flex-row gap-2.5 justify-items-center-safe items-center-safe">
+        <i class="fi fi-rr-problem-solving text-xl text-gray-500 p-4 bg-gray-500/30 rounded-xl border border-gray-500"></i>
+        <div class="flex flex-col gap-1">
+            <p>This section displays the raw technical identifiers used internally by the system, such as database IDs. These values are shown for reference purposes only and are not joined with user-friendly labels or additional information. They are intended for technical users who may need direct insight into the underlying data structure or for debugging purposes</p>
+            
+        </div>
+    </div>
+
+    <div class="w-full flex flex-col gap-1">
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis id:</p>
+            <p>{{ analysis?.id ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis status:</p>
+            <p>{{ analysis?.status ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis message:</p>
+            <p>{{ analysis?.message ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis file id:</p>
+            <p>{{ analysis?.file_id ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis code snippet id:</p>
+            <p>{{ analysis?.codesnippet_id ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis tool id:</p>
+            <p>{{ analysis?.tool_id ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis category ids:</p>
+            <p>{{ analysis?.analysis_categoryIds ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis created time:</p>
+            <p>{{ analysis?.created_at ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis end time:</p>
+            <p>{{ analysis?.end_datetime ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis execution time (from result json):</p>
+            <p>{{ analysis?.execution_ms ?? 'undefined' }}ms</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis overall severity (from result json):</p>
+            <p>{{ analysis?.overall_severity ?? 'undefined' }}/5</p>
+        </div>
+        <div class="flex flex-row items-center-safe gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+            <p>Analysis issues count (from result json):</p>
+            <p>{{ analysis?.issues_count ?? 'undefined' }}</p>
+        </div>
+        <div class="flex flex-col gap-1.5 px-2 rounded-md hover:bg-gray-500/30 transition-colors duration-200 ease-out">
+            <div (click)="toggleCompleteJsonResponse()" class="flex flex-row items-center gap-1.5 cursor-pointer">
+                <i class="fi fi-rr-problem-solving text-sm text-gray-500"></i>
+                <p>Analysis complete result json (click to show):</p>
+                <p>{{ analysis?.result_json ?? 'undefined' }}</p>
+            </div>
+            <pre class="max-h-100 mb-3 p-3 break-all bg-gray-800/40 text-white rounded overflow-y-auto" [hidden]="completeJsonResponseStatus()">
+                {{ analysis?.result_json | json }}
+            </pre>
+        </div>
+    </div>
+</div>

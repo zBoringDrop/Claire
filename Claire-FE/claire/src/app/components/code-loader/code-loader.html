@@ -1,0 +1,114 @@
+<div class="w-full flex flex-col gap-5 p-7 bg-dark-matter border border-soma-dark2 rounded-2xl text-accent-foreground text-wrap">
+    <div class="flex flex-row justify-start items-center-safe gap-3">
+        <div class="rounded-full w-10 h-10 bg-pink-600 flex justify-center-safe items-center-safe">
+            <p>3</p>
+        </div>
+        <div class="felx flex-col">
+            <p class="text-md">Load the code</p>
+            <p class="text-xs">Paste your code or upload a file</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 w-full bg-dark-matter border rounded-3xl border-soma-dark gap-3">
+        @for (option of loaderOptions; track option.title) {
+            <div (click)="enableByTitle(option.title)" class="flex flex-row w-full p-1.5 justify-center-safe items-center-safe gap-x-2 rounded-3xl cursor-pointer border border-dark-matter-light hover:border-soma-purple hover:bg-soma-dark transition-colors duration-200 ease-out"
+            [ngClass]="{
+                'bg-soma-dark': option.clicked,
+                'bg-dark-matter-light': !option.clicked
+            }">
+                <i class="fi text-sm text-purple-400" [ngClass]="option.icon"></i>
+                <span>{{ option.title }}</span>
+            </div>
+        }
+    </div>
+
+    
+    @if (loaderOptions[0].clicked) {
+        <app-file-uploader (fileIdAndName)="onFileChange($event)"></app-file-uploader>
+    }
+    @else if (loaderOptions[1].clicked) {
+        <app-snippet-uploader (snippetIdAndName)="onSnippetChange($event)"></app-snippet-uploader>
+    }
+    @else if (loaderOptions[2].clicked) {
+        @let files = libraryFilesList();
+        @let snippets = librarySnippetsList();
+
+        @if (files.length > 0 || snippets.length > 0) {
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full border p-5 border-soma-dark rounded-lg bg-cell-membrane">
+                        
+                <div class="flex flex-col">
+                    <div class="flex flex-row">
+                        <i class="fi fi-rr-cloud pr-3"></i>
+                        <span>Uploaded file ({{ files.length }})</span>
+                    </div>
+
+                    <div class="flex flex-col gap-3 mt-2 max-h-100 overflow-y-auto">
+                    @for (fileCode of files; track fileCode.id) {
+                        <div (click)="setSelectedFile(fileCode)" class="flex flex-col border text-sm bg-soma-dark2/40 border-soma-dark hover:bg-soma-dark/40 rounded-xl p-3 text-gray-300 hover:border-soma-purple cursor-pointer transition-colors duration-200 ease-out">
+                            <div class="flex flex-row">
+                                <i class="fi fi-rr-file-code pr-3"></i>
+                                <span>{{ fileCode.filename }}</span>
+                            </div>
+                            <div class="flex flex-row gap-3 mt-1 text-xs text-gray-500">
+                                <span>{{ fileCode.size }} B</span>
+                                <span>{{ fileCode.language | removeUnderscore | titlecase  }}</span>
+                                <span>{{ fileCode.analysis_count }} analysis</span>
+                            </div>
+                            <div class="flex flex-row text-xs text-gray-500">
+                                <i class="fi fi-rr-clock pr-1"></i>
+                                <span>{{ fileCode.upload_datetime | date:'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                        </div>
+                    }
+                    </div>
+                </div>
+
+                <div class="flex flex-col">
+                    <div class="flex flex-row">
+                        <i class="fi fi-rr-square-code pr-3"></i>
+                        <span>Uploaded snippet ({{ snippets.length }})</span>
+                    </div>
+
+                    <div class="flex flex-col gap-3 mt-2 max-h-100 overflow-y-auto">
+                    @for (snippet of snippets; track snippet.id) {
+                        <div (click)="setSelectedSnippet(snippet)" class="flex flex-col border text-sm bg-soma-dark2/40 border-soma-dark rounded-xl p-3 text-gray-300 hover:bg-soma-dark/40 hover:border-soma-purple cursor-pointer transition-colors duration-200 ease-out">
+                            <div class="flex flex-row">
+                                <i class="fi fi-rr-file-code pr-3"></i>
+                                <span>{{ snippet.title }}</span>
+                            </div>
+                            <div class="flex flex-row gap-3 mt-1 text-xs text-gray-500">
+                                <span>{{ snippet.language | removeUnderscore | titlecase }}</span>
+                                <span>{{ snippet.analysis_count }} analysis</span>
+                            </div>
+                            <div class="flex flex-row text-xs text-gray-500">
+                                <i class="fi fi-rr-clock pr-1"></i>
+                                <span>{{ snippet.creation_datetime | date:'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                        </div>
+                    }
+                    </div>
+                </div>
+            </div>
+        } @else {
+            <div class="flex flex-row p-5 items-center-safe justify-center-safe rounded-md bg-cell-membrane">
+                <p>You have not yet uploaded any files or snippets</p>
+            </div>
+        }
+    }
+
+    @if (source_title.value != null && source_title.value.trim().length > 0) {
+        <div class="flex flex-row gap-1.5 items-center-safe text-sm">
+            <p>Selected:</p>
+            
+            @if (source_isSnippet.value != null && source_isSnippet.value) {
+                <p class="px-2 py-0.5 bg-soma-purple/20 rounded-md border border-soma-purple hover:bg-soma-purple/40 cursor-default transition-colors duration-200 ease-out">Snippet</p>
+            } @else {
+                <p class="px-2 py-0.5 bg-soma-purple/20 rounded-md border border-soma-purple hover:bg-soma-purple/40 cursor-default transition-colors duration-200 ease-out">File</p>
+            }
+            <p class="font-bold">{{ source_title.value }}</p>
+        </div>
+    } @else {
+        <p>You have to select a source to analyze</p>
+    }
+
+</div>

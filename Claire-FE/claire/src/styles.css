@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@import '@flaticon/flaticon-uicons/css/all/all.css';
+
+@theme {
+
+  /* palette base */
+  --color-soma-purple: #8b5cf6;
+  --color-soma-dark: #5e3a99;
+  --color-soma-dark2: #422A6B;
+  --color-dendrite-blue: #3b82f6;
+  --color-axon-cyan: #06b6d4;
+  --color-myelin-gold: #f59e0b;
+  --color-synapse-pink: #ec4899;
+  --color-neuron-gray: #6b7280;
+  --color-dark-matter: #0f0a1e;
+  --color-dark-matter-light: #342475;
+  --color-cell-membrane: #1e1b2e;
+
+  /* semantic surfaces */
+  --color-background: hsl(240 10% 3.9%);
+  --color-foreground: hsl(0 0% 98%);
+  --color-card: hsl(240 10% 3.9%);
+  --color-card-foreground: hsl(0 0% 98%);
+  --color-popover: hsl(240 10% 3.9%);
+  --color-popover-foreground: hsl(0 0% 98%);
+
+  /* brand roles */
+  --color-primary: hsl(0 0% 98%);
+  --color-primary-foreground: hsl(240 5.9% 10%);
+  --color-secondary: hsl(240 3.7% 15.9%);
+  --color-secondary-foreground: hsl(0 0% 98%);
+
+  /* neutral */
+  --color-muted: hsl(240 3.7% 15.9%);
+  --color-muted-foreground: hsl(240 5% 64.9%);
+  --color-accent: hsl(240 3.7% 15.9%);
+  --color-accent-foreground: hsl(0 0% 98%);
+
+  /* feedback */
+  --color-destructive: hsl(0 62.8% 30.6%);
+  --color-destructive-foreground: hsl(0 0% 98%);
+  --color-error: hsl(355.49, 77.58%, 56.27%);
+
+  /* ui lines */
+  --color-border: hsl(240 3.7% 15.9%);
+  --color-input: hsl(240 3.7% 15.9%);
+  --color-ring: hsl(240 4.9% 83.9%);
+
+  /* radius */
+  --radius: 0.5rem;
+
+  /* charts */
+  --color-chart-1: hsl(220 70% 50%);
+  --color-chart-2: hsl(160 60% 45%);
+  --color-chart-3: hsl(30 80% 55%);
+  --color-chart-4: hsl(280 65% 60%);
+  --color-chart-5: hsl(340 75% 55%);
+
+}
+
+html * {
+   font-family: 'Roboto', 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, serif !important;
+   scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0f0a1e;
+  scroll-behavior: smooth;
+}
+
+pre, code {
+  font-family: 'Fira Code', 'JetBrains Mono', 'Source Code Pro', monospace !important;
+  line-height: 1.5;
+  white-space: pre-wrap !important; 
+  word-wrap: break-word;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0f0a1e;
+  border-radius: 5px; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #5e3a99; 
+}

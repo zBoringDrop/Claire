@@ -1,0 +1,139 @@
+<section class="w-full max-w-7xl mx-auto text-xs flex flex-col justify-center-safe items-center-safe p-10 gap-8">
+
+    @let runningAnalysis = userRunningAnalysis();
+    @let completedAnalysis = userCompletedAnalysis();
+    @let partialAnalysis = userPartialAnalysis();
+    @let failedAnalysis = userFailedAnalysis();
+
+    <div class="flex flex-col w-full bg-dark-matter-light/40 p-5 border rounded-xl border-soma-purple">
+        <div class="flex flex-row items-center-safe justify-items-center-safe gap-5">
+            <i class="fi fi-rr-clock-five text-4xl text-accent-foreground"></i>
+            <div class="flex flex-col text-accent-foreground">
+                <p class="text-xl">Analysis history</p>
+                <div class="w-full flex flex-col sm:flex-row gap-3 justify-center-safe justify-items-center-safe items-center-safe">
+                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1.5">
+                        <i class="fi fi-rr-heart-rate text-xs text-accent-foreground animate-pulse"></i>
+                        <span>{{ runningAnalysis.length }} in progress</span>
+                    </div>
+                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1.5">
+                        <i class="fi fi-rr-check-circle text-xs text-accent-foreground"></i>
+                        <span>{{ completedAnalysis.length }} completed</span>
+                    </div>
+                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1.5">
+                        <i class="fi fi-rr-puzzle text-xs text-accent-foreground"></i>
+                        <span>{{ partialAnalysis.length }} partial</span>
+                    </div>
+                    <div class="flex flex-row justify-items-center-safe items-center-safe gap-1.5">
+                        <i class="fi fi-rr-cross-circle text-xs text-accent-foreground"></i>
+                        <span>{{ failedAnalysis.length }} failed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (runningAnalysis && runningAnalysis.length > 0) {
+        <div class="w-full flex flex-col gap-4 p-5 border bg-dark-matter border-soma-dark2 rounded-lg">
+            <div class="flex flex-col w-full">
+                <div class="flex flex-row text-accent-foreground gap-2 items-center-safe text-lg">
+                    <i class="fi fi-rr-heart-rate text-accent-foreground"></i>
+                    <p>Running analysis</p>
+                    <p class="text-lg font-bold">{{ runningAnalysis.length }}</p>
+                </div>
+            </div>
+
+            @if (!loadingRunningAnalysis()) {
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 max-h-150 overflow-y-auto">
+                    @for (analysisPreview of runningAnalysis; track analysisPreview.id) {
+                        <app-analysis-running [analysisPreview]="analysisPreview"></app-analysis-running>
+                    }
+                </div>
+            } @else {
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5">
+                    <app-analysis-running [analysisPreview]="undefined"></app-analysis-running>
+                    <app-analysis-running [analysisPreview]="undefined"></app-analysis-running>
+                    <app-analysis-running [analysisPreview]="undefined"></app-analysis-running>
+                </div>
+            }
+        </div>
+    }
+    
+    <div class="w-full flex flex-col gap-4 p-5 border bg-dark-matter border-soma-dark2 rounded-lg">
+        <div class="flex flex-col w-full">
+            <div class="flex flex-row text-accent-foreground gap-2 items-center-safe text-lg">
+                <i class="fi fi-rr-check-circle text-accent-foreground"></i>
+                <p>Completed Analysis</p>
+                <p class="font-bold">{{ completedAnalysis.length }}</p>
+            </div>
+        </div>
+
+        @if (!loadingCompletedAnalysis()) {
+            @if (completedAnalysis.length > 0) {
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 max-h-150 overflow-y-auto">
+                    @for (analysisPreview of completedAnalysis; track analysisPreview.id) {
+                        <app-analysis-completed [analysisPreview]="analysisPreview"></app-analysis-completed>
+                    }
+                </div>
+            }
+        } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5">
+                <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+                <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+                <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+            </div>
+        }
+    </div>
+
+    <div class="w-full flex flex-col gap-4 p-5 border bg-dark-matter border-soma-dark2 rounded-lg">
+        <div class="flex flex-col w-full">
+            <div class="flex flex-row text-accent-foreground gap-2 items-center-safe text-lg">
+                <i class="fi fi-rr-check-circle text-accent-foreground"></i>
+                <p>Partial Analysis</p>
+                <p class="font-bold">{{ partialAnalysis.length }}</p>
+            </div>
+        </div>
+
+        @if (!loadingPartialAnalysis()) {
+            @if (completedAnalysis.length > 0) {
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 max-h-150 overflow-y-auto">
+                    @for (analysisPreview of partialAnalysis; track analysisPreview.id) {
+                        <app-analysis-completed [analysisPreview]="analysisPreview"></app-analysis-completed>
+                    }
+                </div>
+            }
+        } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5">
+                <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+                <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+                <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+            </div>
+        }
+    </div>
+
+    <div class="w-full flex flex-col gap-4 p-5 border bg-dark-matter border-soma-dark2 rounded-lg">
+        <div class="flex flex-col w-full">
+            <div class="flex flex-row text-accent-foreground gap-2 items-center-safe text-lg">
+                <i class="fi fi-rr-cross-circle text-accent-foreground"></i>
+                <p>Failed analysis</p>
+                <p class="font-bold">{{ failedAnalysis.length }}</p>
+            </div>
+        </div>
+
+        @if (!loadingFailedAnalysis()) {
+            @if (failedAnalysis.length > 0) {
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 max-h-150 overflow-y-auto">
+                    @for (analysisPreview of failedAnalysis; track analysisPreview.id) {
+                        <app-analysis-failed [analysisPreview]="analysisPreview"></app-analysis-failed>
+                    }
+                </div>
+            }
+        } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5">
+                <app-analysis-failed [analysisPreview]="undefined"></app-analysis-failed>
+                <app-analysis-failed [analysisPreview]="undefined"></app-analysis-failed>
+                <app-analysis-failed [analysisPreview]="undefined"></app-analysis-failed>
+            </div>   
+        }
+    </div>
+
+</section>

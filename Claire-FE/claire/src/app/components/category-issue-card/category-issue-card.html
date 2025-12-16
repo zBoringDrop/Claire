@@ -1,0 +1,208 @@
+<div class="w-full flex flex-col p-3 rounded-xl bg-cell-membrane border border-soma-dark hover:border-soma-purple transition-colors duration-200 ease-out"
+    [ngClass]="{'gap-3': detailsSectionStatus()}">
+    <div (click)="openDetails()" class="flex flex-row gap-3 rounded-xl justify-items-center-safe items-center-safe p-2 hover:bg-red-400/30 cursor-pointer transition-colors duration-200 ease-out">
+        <div class="w-full flex flex-row gap-3 items-center-safe">
+            <i title="Severity 4" class="fi fi-rr-exclamation text-xl text-red-400"></i>
+            <p class="text-gray-400 text-sm font-bold">#{{ i+1 }}</p>
+
+            @let scoreColor = getScoreColor(issue.severity);
+
+            <div title="severity" class="flex flex-row text-xs text-accent-foreground">
+                <div 
+                [ngClass]="
+                [scoreColor.bgTitleClass, 
+                scoreColor.borderClass,
+                scoreColor.hoverBgClass]" 
+                class="border px-3 py-0.5 rounded-md transition-colors duration-200 ease-out">
+                    <p>{{ issue.severity }}</p>
+                </div>
+            </div>
+
+            <p class="text-accent-foreground text-sm font-bold">{{ issue.type }}</p>
+        </div>
+
+        <div class="w-full justify-end-safe flex flex-row gap-3">
+            <i class="fi fi-rr-angle-small-up text-xl text-red-400 hover:text-red-500 transition-transform duration-300" 
+                [ngClass]="{ 'rotate-180': detailsSectionStatus() }"
+            ></i>
+        </div>
+    </div>
+
+    <div
+        class="overflow-hidden flex flex-col gap-3 transition-all duration-500 ease-in-out"
+        [ngClass]="detailsSectionStatus() ? 'max-h-120 opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'"
+    >
+        
+        @if (issue.location) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-marker text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Location</p>
+                    <span class="font-normal text-gray-300">{{ issue.location }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.desc) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-question text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Description</p>
+                    <span class="font-normal text-gray-300">{{ issue.desc }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.why) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-question text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Why is it a problem?</p>
+                    <span class="font-normal text-gray-300">{{ issue.why }}</span>
+                </div>
+            </div>
+        }
+        
+        @if (issue.fix) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-wrench-alt text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">How to fix</p>
+                    <span class="font-normal text-gray-300">{{ issue.fix }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.scenario) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-sad text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Failure scenario</p>
+                    <span class="font-normal text-gray-300">{{ issue.scenario }}</span>
+                </div>
+            </div>
+        }
+        
+        @if (issue.impact) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-limit-speedometer text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Performance impact</p>
+                    <span class="font-normal text-gray-300">{{ issue.impact }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.gain) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-dashboard text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Expected improvement</p>
+                    <span class="font-normal text-gray-300">{{ issue.gain }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.principle) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-pencil-paintbrush text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Design principle violated</p>
+                    <span class="font-normal text-gray-300">{{ issue.principle }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.benefit) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-magic-wand text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Benefits of fixing</p>
+                    <span class="font-normal text-gray-300">{{ issue.benefit }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.metric && issue.reduced) {
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-algorithm text-lg text-red-500"></i>
+                    <div class="flex flex-col gap-2">
+                        <p class= "text-sm font-bold">Complexity metric value</p>
+                        <app-code-viewer [onlyCode]="true" [code]="issue.metric"></app-code-viewer>
+                    </div>
+                </div>
+
+                <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-algorithm text-lg text-green-500"></i>
+                    <div class="flex flex-col gap-2">
+                        <p class= "text-sm font-bold">Expected complexity after fix</p>
+                        <app-code-viewer [onlyCode]="true" [code]="issue.reduced"></app-code-viewer>
+                    </div>
+                </div>
+            </div>
+        }
+        
+        @if (issue.current && issue.suggested) {
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-bugs text-lg text-red-500"></i>
+                    <div class="flex flex-col gap-2">
+                        <p class= "text-sm font-bold">Current name/documentation</p>
+                        <app-code-viewer [onlyCode]="true" [code]="issue.current"></app-code-viewer>
+                    </div>
+                </div>
+
+                <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-bug-slash text-lg text-green-500"></i>
+                    <div class="flex flex-col gap-2">
+                        <p class= "text-sm font-bold">Better alternative</p>
+                        <app-code-viewer [onlyCode]="true" [code]="issue.suggested"></app-code-viewer>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (issue.clarity) {
+            <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                <i class="fi fi-rr-octagon-check text-lg text-soma-purple"></i>
+                <div class="flex flex-col gap-2">
+                    <p class= "text-sm font-bold">Clarity improvement</p>
+                    <span class="font-normal text-gray-300">{{ issue.clarity }}</span>
+                </div>
+            </div>
+        }
+
+        @if (issue.before && issue.after) {
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+                
+                <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-bugs text-lg text-red-500 mt-1"></i>
+                    
+                    <div class="flex flex-col gap-2 w-full overflow-hidden">
+                        <p class="text-sm font-bold">Buggy code</p>
+                        
+                        <div class="rounded-md overflow-x-auto w-full">
+                            <app-code-viewer [onlyCode]="true" [code]="issue.before"></app-code-viewer>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-row bg-soma-purple/20 text-accent-foreground gap-3 rounded-xl p-3 hover:bg-soma-purple/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-bug-slash text-lg text-green-500 mt-1"></i>
+                    
+                    <div class="flex flex-col gap-2 w-full overflow-hidden">
+                        <p class="text-sm font-bold">Fixed code</p>
+                        
+                        <div class="rounded-md overflow-x-auto w-full">
+                            <app-code-viewer [onlyCode]="true" [code]="issue.after"></app-code-viewer>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        }
+
+    </div>
+
+</div>

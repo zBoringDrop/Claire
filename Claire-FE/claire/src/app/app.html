@@ -1,0 +1,14 @@
+<router-outlet></router-outlet>
+
+<ngx-sonner-toaster closeButton
+  [toastOptions]="{
+        classes: {
+            toast: '!bg-soma-dark2 !border-soma-dark !shadow-lg [&_svg]:!text-accent-foreground', 
+            title: '!text-accent-foreground text-md font-bold',
+            description: '!text-accent-foreground',
+            actionButton: '!bg-zinc-400',
+            cancelButton: '!bg-orange-400',
+            closeButton: '!bg-soma-dark2 !text-accent-foreground !border-accent-foreground'
+        }
+    }"
+/>

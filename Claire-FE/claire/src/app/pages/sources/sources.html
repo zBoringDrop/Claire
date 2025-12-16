@@ -1,0 +1,68 @@
+@if (showDeleteDialog()) {
+    <app-confirmation-dialog (dialogClose)="onDialogResponse($event)" [idToRemove]="sourceIdToDelete()" [resource]="sourceNameToDelete()"></app-confirmation-dialog>
+}
+
+<section class="w-full max-w-7xl mx-auto flex flex-col justify-center-safe items-center-safe p-10 text-accent-foreground">
+
+    <div class="w-full flex flex-col gap-5">
+
+        @let files = libraryFilesList();
+        @let snippets = librarySnippetsList();
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 w-full bg-dark-matter border rounded-3xl border-soma-dark gap-3">
+            @for (option of loaderOptions; track option.title) {
+                <div (click)="enableByTitle(option.title)" class="flex flex-row w-full p-1.5 justify-center-safe items-center-safe gap-x-2 rounded-3xl cursor-pointer border border-dark-matter-light hover:border-soma-purple hover:bg-soma-dark transition-colors duration-200 ease-out"
+                [ngClass]="{
+                    'bg-soma-dark': option.clicked,
+                    'bg-dark-matter-light': !option.clicked
+                }">
+                    <i class="fi text-sm text-purple-400" [ngClass]="option.icon"></i>
+                    <span>{{ option.title }}</span>
+                </div>
+            }
+        </div>
+
+        <div class="w-full">
+            @if (loaderOptions[0].clicked) {
+
+                <div class="w-full flex flex-col gap-7">
+                    <app-file-uploader (fileIdAndName)="onUploadFile()"></app-file-uploader>
+
+                    @if (files) {
+                        <p>{{ files.length }} files found</p>
+
+                        <div class="flex flex-col gap-2 max-h-200 overflow-y-auto">
+                            @for (file of files; track file.id) {
+                                <app-file-element [file]="file" (fileDeleteClick)="onFileDelete($event)"></app-file-element>
+                            }
+                        </div>
+                    } @else {
+                        <p>You have not uploaded any files yet. To do so, use the interface at the top.</p>
+                    }
+                </div>
+
+            } @else if (loaderOptions[1].clicked) {
+
+                <div class="w-full flex flex-col gap-7">
+
+                    <app-snippet-uploader (snippetIdAndName)="onUploadSnippet()"></app-snippet-uploader>
+
+                    @if (snippets) {
+                        <p>{{ snippets.length }} code snippets found</p>
+
+                        <div class="flex flex-col gap-2 max-h-200 overflow-y-auto">
+                            @for (snippet of snippets; track snippet.id) {
+                                <app-snippet-element [snippet]="snippet" (snippetDeleteClick)="onSnippetDelete($event)"></app-snippet-element>
+                            }
+                        </div>
+                    } @else {
+                        <p>You have not uploaded any code snippet yet. To do so, use the interface at the top.</p>
+                    }
+
+                </div>
+            }
+        </div>
+
+    </div>
+
+</section>

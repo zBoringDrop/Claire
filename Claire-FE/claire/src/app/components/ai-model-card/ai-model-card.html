@@ -1,0 +1,145 @@
+@if (aiTool) {
+    <div class="flex flex-col text-xs gap-3 p-5 border-soma-dark2 rounded-xl bg-cell-membrane hover:bg-soma-purple/20 hover:border-soma-purple transition-colors duration-200 ease-out">
+        <div class="flex flex-row items-center-safe justify-start gap-3">
+            <i class="fi fi-rr-brain-circuit text-2xl text-white/40"></i>
+
+            <div class="flex flex-row flex-wrap items-center-safe justify-center-safe gap-2">
+                <p class="text-lg font-bold text-accent-foreground">{{ aiTool.name }}</p>
+                <div class="text-[10px] text-accent-foreground px-2 border rounded-md bg-soma-dark2 border-soma-dark hover:border-soma-purple cursor-default transition-colors duration-200 ease-out">
+                    <p>{{ aiTool.provider_type }}</p>
+                </div>
+            </div>
+        </div>
+
+        @if (aiTool.ai_description) {
+            <p class="text-gray-300 mb-2">{{ aiTool.ai_description }}</p>
+        }
+
+        <div class="grid gap-2 grid-cols-1 md:grid-cols-2 text-xs">
+            <div class="flex flex-row w-full justify-start items-center-safe gap-x-1">
+                    <i class="fi fi-rr-microchip text-sm text-blue-400"></i>
+                    <span class="text-gray-500">Provider:</span><span class="text-gray-300">{{ aiTool.provider_name | removeUnderscore | titlecase }}</span>
+            </div>
+
+            @if (aiTool.parameter_size != null) {
+                <div class="flex flex-row w-full justify-start items-center-safe gap-x-1">
+                    <i class="fi fi-rr-brain-circuit text-sm text-purple-400"></i>
+                    <span class="text-gray-500">Parameter:</span><span class="text-gray-300">{{ aiTool.parameter_size }}</span>
+                </div>
+            }
+            @if (aiTool.family != null) {
+                <div class="flex flex-row w-full justify-start items-center-safe gap-x-1">
+                    <i class="fi fi-rr-database text-sm text-pink-400"></i>
+                    <span class="text-gray-500">Family:</span><span class="text-gray-300">{{ aiTool.family | titlecase }}</span>
+                </div>
+            }
+            @if (aiTool.size != null && aiTool.size > 0) {
+                <div class="flex flex-row w-full justify-start items-center-safe gap-x-1">
+                    <i class="fi fi-rr-disk text-sm text-yellow-400"></i>
+                    <span class="text-gray-500">Size:</span><span class="text-gray-300">{{ (aiTool.size / 1073741824) | number:'1.2-2' }} GB</span>
+                </div>
+            }
+
+            @let provider = aiTool.provider_name.toLowerCase();
+            @if (provider.includes('google')) {
+                @let extraDetails = getGoogleExtraDetails();
+
+                @if (extraDetails) {
+
+                    @if (extraDetails.temperature) {
+                        <div 
+                        title="Controls 'creativity'. Low values (near 0) make responses precise and deterministic; high values (near 1 or above) make them more varied and unpredictable"
+                        class="flex flex-row w-full justify-start items-center-safe gap-x-1"
+                        >
+                            <i class="fi fi-rr-thermometer-half text-sm text-blue-400"></i>
+                            <span class="text-gray-500">Temperature:</span><span class="text-gray-300">{{ extraDetails.temperature }}</span>
+                        </div>
+                    }
+                    
+                    <div 
+                    title="A parameter (often for advanced reasoning models) that enables or reveals the internal logical process ('chain of thought') before the final answer"
+                    class="flex flex-row w-full justify-start items-center-safe gap-x-1"
+                    >
+                        <i class="fi fi-rr-thought-bubble text-sm text-purple-400"></i>
+                        <span class="text-gray-500">Thinking:</span><span class="text-gray-300">{{ extraDetails.thinking ? 'Yes' : 'No' }}</span>
+                    </div>
+
+                    @if (extraDetails.inputTokenLimit) {
+                        <div 
+                        title="The maximum number of tokens (words or word parts) the model can accept and process in a single prompt"
+                        class="flex flex-row w-full justify-start items-center-safe gap-x-1"
+                        >
+                            <i class="fi fi-rr-poll-h text-sm text-yellow-400"></i>
+                            <span class="text-gray-500">Token in:</span><span class="text-gray-300">{{ extraDetails.inputTokenLimit }}</span>
+                        </div>
+                    }
+
+                    @if (extraDetails.outputTokenLimit) {
+                        <div 
+                        title="The maximum number of tokens the model can generate in its response"
+                        class="flex flex-row w-full justify-start items-center-safe gap-x-1"
+                        >
+                            <i class="fi fi-rr-poll-h text-sm text-orange-400"></i>
+                            <span class="text-gray-500">Token out:</span><span class="text-gray-300">{{ extraDetails.outputTokenLimit }}</span>
+                        </div>
+                    }
+
+                }
+            }
+            
+        </div>
+
+        @if (aiTool.active) {
+            <div class="flex flex-row justify-items-start items-center-safe gap-1">
+                <span class="relative flex size-2">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex size-2 rounded-full bg-green-500"></span>
+                </span>
+                <span class="text-green-400">Available</span>
+            </div>
+        } @else {
+            <div class="flex flex-row justify-items-start items-center-safe gap-1">
+                <span class="relative flex size-2">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex size-2 rounded-full bg-red-500"></span>
+                </span>
+                <span class="text-red-400">Not available</span>
+            </div>
+        }
+
+        @if (providerSection != null && providerSection == true) {
+            <div class="flex flex-row mt-4 w-full justify-start gap-x-1">
+                <i class="fi fi-rr-search text-sm text-yellow-400"></i>
+                <span class="text-gray-500">About:</span><span class="text-gray-300">{{ aiTool.provider_description }}</span>
+            </div>
+        }
+
+    </div>
+} @else {
+    <div class="flex flex-col text-xs gap-3 p-5 border-soma-dark2 rounded-xl bg-cell-membrane hover:bg-soma-purple/20 hover:border-soma-purple transition-colors duration-200 ease-out">
+        <div class="flex flex-row items-center-safe justify-start gap-3">
+            <app-loading-icon></app-loading-icon>
+
+            <div class="flex flex-col">
+                <app-loading-data></app-loading-data>
+            </div>
+        </div>
+
+        <div class="grid gap-1 grid-cols-1 md:grid-cols-2 flex-wrap text-xs">
+            <div class="flex flex-row w-full justify-start gap-x-1">
+                    <app-loading-data></app-loading-data>
+                </div>
+                <div class="flex flex-row w-full justify-start gap-x-1">
+                    <app-loading-data></app-loading-data>
+                </div>
+            <div class="flex flex-row w-full justify-start gap-x-1">
+                    <app-loading-data></app-loading-data>
+                </div>
+                <div class="flex flex-row w-full justify-start gap-x-1">
+                    <app-loading-data></app-loading-data>
+                </div>
+            
+        </div>
+    </div>
+}
+

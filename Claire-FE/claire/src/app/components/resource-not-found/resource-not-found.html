@@ -1,0 +1,32 @@
+<section class="flex flex-col w-full h-screen p-5 mt-16 items-center-safe text-accent-foreground">
+
+    <div class="w-full max-w-180 p-5 grid grid-cols-1 sm:grid-cols-2 justify-center-safe items-center-safe gap-10 bg-cell-membrane border border-soma-dark2 rounded-xl hover:bg-soma-purple/20 hover:border-soma-purple transition-colors duration-200 ease-out">
+        <div class="w-full flex flex-col justify-center-safe items-center-safe">
+            <i class="fi fi-rr-ufo-beam text-9xl text-blue-400"></i>
+            <i class="fi text-2xl text-white animate-pulse hover:animate-spin"
+            [title]="notFoundCategory?.name + ' ' + id"
+            [ngClass]="notFoundCategory?.icon ?? 'fi-rr-cow-alt'"></i>
+        </div>
+
+        <div class="w-full flex flex-col justify-center-safe items-center-safe gap-4 bg-dark-matter rounded-xl p-3">
+            <div class="w-full flex flex-col justify-items-start items-start">
+                <p class="text-3xl font-bold">Oops!</p>
+                <p class="text-xl font-bold">{{ notFoundCategory?.name }} not found</p>
+            </div>
+            <div class="flex flex-col text-gray-300 gap-1.5">
+                <p>{{ notFoundCategory?.p1 }}</p>
+                
+                <p>{{ notFoundCategory?.p2 }}</p>
+
+                <p>{{ notFoundCategory?.p3 }}</p>
+
+                <p class="text-gray-500 text-xs">Not found resource id: {{ id }}</p>
+            </div>
+
+            <button [routerLink]="notFoundCategory?.backLink" class="w-full bg-soma-dark2/70 p-3 rounded-xl hover:bg-soma-dark2 transition-colors duration-200 ease-out">
+                Back
+            </button>
+        </div>
+    </div>
+
+</section>

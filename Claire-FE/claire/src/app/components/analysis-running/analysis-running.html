@@ -1,0 +1,44 @@
+@if (analysisPreview != null) {
+    <div (click)="navigateToAnalysisDeatailsPage()" class="flex flex-col bg-cell-membrane p-5 border border-soma-dark2 rounded-xl gap-3 cursor-pointer hover:border-soma-purple transition-colors duration-200 ease-out">
+        <div class="flex flex-row items-center-safe justify-items-center-safe gap-3">
+            <i class="fi fi-rr-brain-circuit text-accent-foreground text-3xl"></i>
+            <div class="flex flex-col text-accent-foreground gap-1">
+                <p class="font-bold">{{ analysisPreview.source_name }}</p>
+                <p>{{ analysisPreview.tool_name }}</p>
+            </div>
+        </div>
+        <div class="flex flex-row text-accent-foreground items-center-safe gap-2 animate-pulse">
+            <i class="fi fi-rr-bolt text-myelin-gold text-sm"></i>
+            <p>{{ analysisPreview.message }}</p>
+        </div>
+        <div class="flex flex-row flex-wrap gap-1.5 items-center-safe">
+            @for (category of analysisPreview.categories; track category) {
+                <p class="bg-blue-800/30 border border-blue-500 pt-1 pb-1 pl-2 pr-2 rounded-md text-secondary-foreground">{{ category | removeUnderscore | uppercase }}</p>
+            }
+        </div>
+        <div class="flex flex-row text-gray-500 items-center-safe gap-2">
+            <i class="fi fi-rr-pending text-xs"></i>
+            <p class="text-xs">Started on {{ analysisPreview.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+    </div>
+} @else {
+    <div class="flex flex-col bg-cell-membrane p-5 border border-soma-dark2 rounded-xl gap-3 hover:border-soma-purple transition-colors duration-200 ease-out">
+        <div class="flex flex-row items-center-safe justify-items-center-safe gap-3">
+            <app-loading-icon></app-loading-icon>
+            <div class="flex flex-col text-accent-foreground gap-1">
+                <app-loading-data></app-loading-data>
+                <app-loading-data></app-loading-data>
+            </div>
+        </div>
+        <div class="flex flex-row text-accent-foreground items-center-safe gap-2 animate-pulse">
+            <app-loading-data></app-loading-data>
+        </div>
+        <div class="flex flex-row flex-wrap gap-1.5 items-center-safe">
+            <app-loading-data></app-loading-data>
+            <app-loading-data></app-loading-data>
+        </div>
+        <div class="flex flex-row text-gray-500 items-center-safe gap-2">
+            <app-loading-data></app-loading-data>
+        </div>
+    </div>
+}

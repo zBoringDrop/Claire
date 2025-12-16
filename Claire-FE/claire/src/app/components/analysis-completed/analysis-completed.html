@@ -1,0 +1,85 @@
+@if (analysisPreview != null) {
+
+    @let scoreColor = getScoreColor(analysisPreview.overall_severity);
+
+    <div (click)="navigateToAnalysisDeatailsPage()" class="flex flex-col bg-cell-membrane p-5 border border-soma-dark2 rounded-xl gap-3 hover:border-soma-purple text-accent-foreground cursor-pointer transition-colors duration-200 ease-out">
+        <div [ngClass]="scoreColor.bgTitleClass" class="flex flex-row gap-3 items-center-safe rounded-xl">
+            <div [ngClass]="scoreColor.bgValueClass" class="p-5 rounded-xl">
+                <p class="font-bold text-accent-foreground text-sm">{{ analysisPreview.overall_severity }}</p>
+            </div>
+            <div class="flex flex-col gap-1 truncate">
+                <div class="flex flex-row gap-2 items-center-safe">
+                    @if (analysisPreview.file_id != null) {
+                        <i title="File" class="fi fi-rr-file-code text-accent-foreground"></i>
+                    } @else {
+                        <i title="Code Snippet" class="fi fi-rr-code-simple text-accent-foreground"></i>
+                    }
+                    <p class="font-bold">{{ analysisPreview.source_name }}</p>
+                </div>
+                <p class="text-xs text-gray-300 mr-3 whitespace-nowrap overflow-hidden text-ellipsis">{{ analysisPreview.source_preview }}</p>
+            </div>
+        </div>
+        <div class="flex flex-row flex-wrap gap-2">
+            @if (analysisPreview.file_id != null) {
+                <div class="flex flex-row gap-2 items-center-safe bg-emerald-400/30 p-1 rounded-md border border-emerald-400">
+                    <i class="fi fi-rr-clip text-accent-foreground text-xs"></i>
+                    <p>File</p>
+                </div>
+            } @else {
+                <div class="flex flex-row gap-2 items-center-safe bg-emerald-400/30 p-1 rounded-md border border-emerald-400">
+                    <i class="fi fi-rr-code-simple text-accent-foreground text-xs"></i>
+                    <p>Snippet</p>
+                </div>  
+            }
+            <div class="flex flex-row gap-2 items-center-safe bg-yellow-500/30 p-1 rounded-md border border-yellow-500">
+                <i class="fi fi-rr-exclamation text-accent-foreground text-xs"></i>
+                <p>{{ analysisPreview.issues_count }}</p>
+                <p>problems</p>
+            </div>
+            <div class="flex flex-row gap-2 items-center-safe bg-soma-purple/30 p-1 rounded-md border border-soma-purple">
+                <i class="fi fi-rr-brain text-accent-foreground text-xs"></i>
+                <p>{{ analysisPreview.tool_name }}</p>
+            </div>
+        </div>
+        <div class="flex flex-row flex-wrap gap-1.5 items-center-safe">
+            @for (category of analysisPreview.categories; track category) {
+                <p class="bg-blue-800/30 border border-blue-500 pt-1 pb-1 pl-2 pr-2 rounded-md text-secondary-foreground">{{ category | removeUnderscore | uppercase }}</p>
+            }
+        </div>
+        <div class="flex flex-row text-gray-500 items-center-safe gap-2 text-xs">
+            <i class="fi fi-rr-pending"></i>
+            <p>{{ analysisPreview.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+        
+    </div>
+} @else {
+    <div class="flex flex-col bg-cell-membrane p-5 border border-soma-dark2 rounded-xl gap-3 hover:border-soma-purple text-accent-foreground transition-colors duration-200 ease-out">
+        <div class="flex flex-row gap-3 items-center-safe rounded-xl">
+            <div class="p-5 rounded-xl">
+                <app-loading-icon></app-loading-icon>
+            </div>
+            <div class="flex flex-col gap-1 truncate">
+                <div class="flex flex-row gap-2 items-center-safe">
+                    <app-loading-data></app-loading-data>
+                </div>
+                <app-loading-data></app-loading-data>
+            </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-row gap-2 items-center-safe">
+                <app-loading-data></app-loading-data>
+            </div>
+            <div class="flex flex-row gap-2 items-center-safe">
+                <app-loading-data></app-loading-data>
+            </div>
+        </div>
+        <div class="flex flex-row flex-wrap gap-1.5 items-center-safe">
+            <app-loading-data></app-loading-data>
+            <app-loading-data></app-loading-data>
+        </div>
+        <div class="flex flex-row text-gray-500 items-center-safe gap-2 text-xs">
+            <app-loading-data></app-loading-data>
+        </div>
+        
+    </div>
+}

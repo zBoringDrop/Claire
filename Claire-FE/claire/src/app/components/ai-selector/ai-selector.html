@@ -1,0 +1,67 @@
+<div class="w-full flex flex-col p-7 bg-dark-matter border gap-5 border-soma-dark2 rounded-2xl text-accent-foreground text-wrap">
+    <div class="flex flex-row justify-start items-center-safe gap-3">
+        <div class="rounded-full w-10 h-10 bg-pink-600 flex justify-center-safe items-center-safe">
+            <p>1</p>
+        </div>
+        <div class="flex flex-col">
+            <p class="text-md">Select AI model</p>
+            <p class="text-xs">You can choose from your local models</p>
+        </div>
+    </div>
+
+    @let tools = aiToolsSearch();
+
+    @if (!isLoading()) {
+
+        @if (aiTools()) {
+
+            <div class="flex flex-row justify-center-safe items-center gap-2">
+                <input [formControl]="searchModelInput" title="Search model" type="search" placeholder="Search a model by name or specific setting" class="w-full text-sm text-gray-400 px-2 py-1 bg-cell-membrane border border-soma-dark2 rounded-md focus:outline-0 focus:border-soma-purple hover:border-soma-dark transition-colors duration-200 ease-out">
+                
+                <button title="Reset" (click)="resetSearchInput()">
+                    <i class="fi fi-rr-cross text-lg text-white/40 hover:text-white transition-colors duration-200 ease-out"></i>
+                </button>
+                <button title="Resync models" (click)="resyncModels()">
+                    <i class="fi fi-rr-rotate-right text-lg text-white/40 hover:text-white transition-colors duration-200 ease-out"></i>
+                </button>
+            </div>
+
+            @if (tools.length > 0) {
+                <div class="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 overflow-y-auto w-full max-h-120">
+                    @for (aiTool of tools; track aiTool.ai_id) {
+                        <label class="border h-fit border-soma-dark2 rounded-xl cursor-pointer has-checked:border-soma-purple transition-colors duration-200 ease-out">
+                            <input type="radio" [formControl]="toolIdForm" [value]="aiTool.ai_id" class="hidden" />
+                            
+                            <app-ai-model-card [aiTool]="aiTool"></app-ai-model-card>
+                        
+                        </label>
+                    }
+                </div>
+            } @else {
+                <p class="text-sm mt-5">No AI model was found using your search among those synchronized in the database.</p>
+            }
+
+        } @else {
+            <p class="text-sm mt-5">You have not yet imported any AI models. To do so, you can use local models such as <a href="https://ollama.com/download" target="_blank" class="font-bold cursor-pointer underline">Ollama</a> or enter API keys from the <a routerLink="/settings" class="font-bold cursor-pointer underline">settings</a>.</p>
+        }
+
+    } @else {
+        <div class="grid h-fit gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10 overflow-y-auto w-full max-h-120">
+            <app-ai-model-card [aiTool]="undefined"></app-ai-model-card>
+            <app-ai-model-card [aiTool]="undefined"></app-ai-model-card>
+            <app-ai-model-card [aiTool]="undefined"></app-ai-model-card>
+        </div>
+    }
+
+    @let toolName = tool_name.value;
+
+    <div class="p-2 bg-soma-dark/20 border border-soma-purple rounded-xl">
+        @if (toolName) {
+            <p class="text-sm">Selected: <span class="font-bold">{{ toolName }}</span></p>
+        }
+        @else {
+            <p class="text-sm">You have to select a model</p>
+        }
+    </div>
+
+</div>

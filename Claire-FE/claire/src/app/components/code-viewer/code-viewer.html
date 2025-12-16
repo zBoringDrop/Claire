@@ -1,0 +1,25 @@
+@if (code) {
+    <div class="w-full flex flex-col justify-items-start items-start gap-3 bg-soma-dark2/20 rounded-xl"
+    [ngClass]="onlyCode ? 'p-0' : 'p-3'">
+
+        @if (!onlyCode) {
+            <p class="text-accent-foreground text-lg">Code</p>
+        }
+        
+        <div class="w-full max-h-150 bg-cell-membrane rounded-xl p-2 overflow-y-auto text-accent-foreground border border-soma-dark2 hover:border-soma-purple hover:bg-cell-membrane/80 transition-colors duration-200 ease-out">
+            <pre><code [appAutoHighlight]="code"></code></pre>
+        </div>
+
+        <div class="w-full flex flex-row text-gray-300 gap-1 justify-center items-center">
+            <div class="w-full flex flex-row items-start justify-start gap-1">
+                <p>Chars: </p>
+                <p>{{ code.length }}</p>
+            </div>
+
+            <div class="w-full flex flex-row items-end justify-end">
+                <button (click)="copyToClipboard()" title="Copy to clipboard" class="px-3 py-2 rounded-md bg-soma-dark2 border border-soma-dark text-accent-foreground hover:bg-soma-dark hover:border-soma-purple transition-all">Copy</button>
+            </div>
+        </div>
+
+    </div>
+}

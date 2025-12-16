@@ -1,0 +1,43 @@
+<section class="w-full max-w-7xl mx-auto flex flex-col justify-center-safe items-center-safe p-10 text-accent-foreground">
+
+    <div class="w-full flex flex-col items-start justify-items-start gap-10">
+
+        <div class="flex flex-col items-start justify-items-start">
+            <p class="text-3xl">Settings</p>
+        </div>
+
+        <div class="w-full flex flex-col text-sm p-3 gap-5 rounded-xl items-start justify-items-start bg-cell-membrane">
+            <p class="text-xl font-bold">Ollama parameters</p>
+
+            <div class="w-full">
+                <app-ollama-configurator></app-ollama-configurator>
+            </div>
+
+        </div>
+
+        <div class="w-full flex flex-col text-sm p-3 gap-5 rounded-xl items-start justify-items-start bg-cell-membrane">
+            <p class="text-xl font-bold">API</p>
+
+            @let providersAndKeys = userProvidersAndKeys();
+
+            <div class="w-full flex flex-col gap-2">
+                @if (providersAndKeys != null) {
+                    
+                    @for (providerInfo of providersAndKeys; track providerInfo.provider_id) {
+                        <app-provider-api-update [providerInfo]="providerInfo"></app-provider-api-update>
+                    }
+                    
+                } @else {
+                    <app-provider-api-update [providerInfo]="undefined"></app-provider-api-update>
+                    <app-provider-api-update [providerInfo]="undefined"></app-provider-api-update>
+                    <app-provider-api-update [providerInfo]="undefined"></app-provider-api-update>
+                }
+            </div>
+
+        </div>
+
+    </div>
+    
+    
+
+</section>

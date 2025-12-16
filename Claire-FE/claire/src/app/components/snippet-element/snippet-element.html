@@ -1,0 +1,40 @@
+@if (snippet != null) {
+    <div class="grid grid-cols-1 sm:grid-cols-8 text-sm bg-cell-membrane items-center-safe gap-4 p-4 rounded-lg hover:bg-soma-dark2 transition-colors duration-200 ease-out">
+
+        <div class="flex flex-col gap-0.5 sm:col-span-2">
+            <p class="font-bold whitespace-nowrap overflow-hidden text-ellipsis">{{ snippet.title }}</p>
+        </div>
+
+        <p class="sm:text-center">{{ snippet.language | removeUnderscore | titlecase }}</p>
+
+        <p class="sm:text-center">{{ snippet.analysis_count }} analysis</p>
+
+        <p class="sm:col-span-2 text-xs overflow-hidden text-ellipsis max-h-10">{{ snippet.code_text }} ...</p>
+
+        <p class="sm:text-center">{{ snippet.creation_datetime| date:'dd/MM/yyyy HH:mm' }}</p>
+
+        <div class="grid grid-cols-2 justify-center-safe items-center-safe">
+            <button (click)="navigateToSnippetDetails()" title="Details" class="hover:bg-blue-500/20 rounded-xl transition-all"><i class="fi fi-sr-eye text-lg text-blue-500"></i></button>
+            <button (click)="sendRequest()" title="Delete" class="hover:bg-red-500/20 rounded-xl transition-all"><i class="fi fi-sr-trash text-lg text-red-500"></i></button>
+        </div>
+
+    </div>
+} @else {
+    <div class="grid grid-cols-1 sm:grid-cols-8 text-sm bg-cell-membrane items-center-safe gap-4 p-4 rounded-lg hover:bg-soma-dark2 transition-colors duration-200 ease-out">
+
+        <div class="flex flex-col sm:col-span-2 gap-2">
+            <app-loading-data></app-loading-data>
+        </div>
+
+        <app-loading-data></app-loading-data>
+
+        <app-loading-data class="sm:col-span-2"></app-loading-data>
+
+        <app-loading-data></app-loading-data>
+
+        <app-loading-data></app-loading-data>
+
+        <app-loading-data></app-loading-data>
+
+    </div>
+}

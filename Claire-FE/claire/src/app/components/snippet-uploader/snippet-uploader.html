@@ -1,0 +1,79 @@
+<form [formGroup]="uploadCodeSnippetForm" (ngSubmit)="uploadCodeSnippet()">
+    <div class="flex flex-col gap-3 w-full border p-5 border-soma-dark rounded-xl text-accent-foreground bg-cell-membrane">
+        <p>Paste a code snippet</p>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <input
+                formControlName="title" placeholder="Insert title" type="text"
+                class="sm:col-span-3 p-3 text-sm bg-soma-dark2 rounded-md outline-soma-purple"
+            >
+
+            <div class="sm:col-span-1 p-3 text-sm bg-soma-dark2 rounded-md">
+                <app-programming-language-selector (programmingLanguageId)="onProgrammingLanguageSelected($event)" [languageInfo]="null"></app-programming-language-selector>
+            </div>
+        </div>
+
+        @if (title?.invalid && (title?.dirty || title?.touched)) {
+            <div class="text-sm text-red-600">
+            @if (title?.hasError('required')) {
+                <p>A title is required!</p>
+            }
+            @if (title?.hasError('minlength')) {
+                <p>Title length must be at least of 4 chars!</p>
+            }
+            @if (title?.hasError('maxlength')) {
+                <p>Title length must be of 30 chars maximum!</p>
+            }
+            </div>
+        }
+
+        <textarea formControlName="code_text" placeholder="Insert your code here..." rows="10" class="p-3 text-sm bg-soma-dark2 rounded-md outline-soma-purple"></textarea>
+
+        <span class="text-gray-400 text-xs">{{ code_text?.value?.length }} chars</span>
+
+        @if (code_text?.invalid && (code_text?.dirty || code_text?.touched)) {
+            <div class="text-sm text-red-600">
+            @if (code_text?.hasError('required')) {
+                <p>Code is required!</p>
+            }
+            @if (code_text?.hasError('minlength')) {
+                <p>Code length must be at least of 20 chars!</p>
+            }
+            @if (code_text?.hasError('maxlength')) {
+                <p>Code length must be of 2500 chars maximum!</p>
+            }
+            </div>
+        }
+
+        @if (uploadCodeSnippetForm.valid) {
+            <div class="flex flex-col gap-3 md:flex-row">
+                
+                <button 
+                    type="reset" 
+                    [disabled]="isUploading()"
+                    class="w-full flex-1/3 border rounded-md border-red-700 cursor-pointer text-center p-2 hover:bg-red-600 transition-all duration-200 ease-out disabled:opacity-50 disabled:cursor-not-allowed">
+                    Reset
+                </button>
+
+                <button 
+                    type="submit" 
+                    [disabled]="isUploading()"
+                    class="w-full border rounded-md border-soma-purple cursor-pointer text-center p-2 hover:bg-soma-dark2 transition-all duration-200 ease-out disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    
+                    @if (isUploading()) {
+                        <span class="flex items-center gap-2">
+                            <svg class="animate-spin h-5 w-5 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Uploading...
+                        </span>
+                    } @else {
+                        <span>Upload</span>
+                    }
+
+                </button>
+            </div>
+        }
+
+    </div>
+</form>

@@ -1,0 +1,39 @@
+@if (category != null) {
+    <div class="flex flex-col text-xs gap-3 text-accent-foreground bg-cell-membrane rounded-xl p-5 hover:bg-soma-purple/20 border-soma-dark hover:border-soma-purple transition-colors duration-200 ease-out"
+    [ngClass]="[
+        defCategory?.hoverBorder ?? 'hover:border-soma-purple'
+    ]">
+        <div class="flex flex-col items-center-safe justify-start gap-3 sm:flex-row">
+            
+            @if (defCategory) {
+                <i class="fi text-2xl" [ngClass]="[defCategory.icon, defCategory.color]"></i>
+            } @else {
+                <i class="fi fi-rr-analyse-alt text-2xl text-white/40"></i>
+            }
+
+            <div class="flex flex-col font-bold text-lg">
+                <p>{{ category.type | removeUnderscore | titlecase }}</p>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-2">
+            <i class="fi fi-rr-info text-sm text-purple-400"></i>
+            <p class="text-gray-300">{{ category.description }}</p>
+        </div>
+    </div>
+} @else {
+    <div class="flex flex-col text-xs gap-3 text-accent-foreground bg-cell-membrane rounded-xl p-5 hover:bg-soma-purple/20 border-soma-dark hover:border-soma-purple border transition-colors duration-200 ease-out">
+        <div class="flex flex-col items-center-safe justify-start gap-3 sm:flex-row">
+            
+            <app-loading-icon></app-loading-icon>
+
+            <div class="flex flex-col font-bold text-lg">
+                <app-loading-data></app-loading-data>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-2">
+            <app-loading-data></app-loading-data>
+        </div>
+    </div>
+}

@@ -1,0 +1,64 @@
+services:
+  # 1. DATABASE MYSQL
+  db:
+    image: mysql:oraclelinux9
+    container_name: claire-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: claire-db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # 2. OLLAMA (AI)
+  ollama:
+    image: ollama/ollama:0.13.2-rc2
+    container_name: claire-ollama
+    ports:
+      - "11435:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  # 3. BACKEND (Spring Boot)
+  backend:
+    build: ./Claire-BE
+    container_name: claire-be 
+    restart: always 
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/claire-db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_PROVIDER_URL: http://ollama:11434
+      LMSTUDIO_PROVIDER_URL: "http://dummy-host:1234"
+      LOCALAI_PROVIDER_URL: "http://dummy-host:8080"
+      ENCRYPTION_PASSWORD: "Dq9sNIC4$Dq9sNIC4U7q!Ok8UE&!$*vp%bj4kuWKvOsxpb3KzZlTMKygDVo2qrFq*U7q*IYaVFAy$$IdEk&^f%@&%" 
+      ENCRYPTION_SALT: "a1aa0ef5f2ccded64bca5a7e6db6e8ee" 
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+
+  # 4. FRONTEND (Angular)
+  frontend:
+    build: ./Claire-FE/claire
+    container_name: claire-fe
+    ports:
+      - "4201:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+  ollama_data:

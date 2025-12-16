@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+*.log
+.DS_Store
+
+# Blocca qualsiasi file .env o .env.local in QUALSIASI cartella
+**/.env
+**/.env.local
+**/.env.properties
+
+!**/.env.local.example
+!**/.env.example

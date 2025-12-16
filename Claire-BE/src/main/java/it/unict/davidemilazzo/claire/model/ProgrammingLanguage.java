@@ -1,0 +1,30 @@
+package it.unict.davidemilazzo.claire.model;
+
+public enum ProgrammingLanguage {
+    JAVA,
+    C,
+    CPP,
+    CSHARP,
+    PYTHON,
+    JAVASCRIPT,
+    TYPESCRIPT,
+    RUBY,
+    PHP,
+    SWIFT,
+    KOTLIN,
+    GO,
+    RUST,
+    SCALA,
+    DART,
+    PERL,
+    HASKELL,
+    LUA,
+    R,
+    OBJECTIVE_C,
+    MATLAB,
+    GROOVY,
+    JULIA,
+    SHELL,
+    SQL,
+    PSEUDO_CODE;
+}

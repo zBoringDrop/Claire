@@ -1,0 +1,126 @@
+@if (notFound()) {
+    <app-resource-not-found [notFoundCategory]="notFoundCategory" [id]="fileId"></app-resource-not-found>
+} @else {
+
+    @let fileInfo = file();
+    @let languageName = language()?.name;
+    @let analysisList = analysis();
+
+    @if (showDeleteDialog()) {
+        <app-confirmation-dialog (dialogClose)="onDialogResponse($event)" [idToRemove]="fileInfo?.id" [resource]="'File'"></app-confirmation-dialog>
+    }
+
+    <section class="w-full max-w-7xl mx-auto text-accent-foreground text-xs flex flex-col justify-center-safe items-center-safe p-10 gap-7">
+
+        <div class="w-full flex flex-col gap-8">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 p-2 rounded-xl items-center gap-4 bg-dark-matter-light/40 border border-soma-purple">
+                <div class="w-full flex flex-row flex-wrap text-xl gap-1.5">
+                    <button (click)="navigateToSources()" title="Back to sources" (click)="openDeleteAnalysisDialog()">
+                        <i class="fi fi-rr-arrow-small-left text-sm p-2 text-accent-foreground rounded-md hover:bg-accent-foreground/20 transition-all"></i>
+                    </button>
+
+                    <p>Details about</p>
+                    @if (fileInfo) {
+                        @if (!fileInfo.deleted) {
+                            <p class="font-bold overflow-hidden whitespace-nowrap text-ellipsis">{{ fileInfo.filename }}</p>
+                        } @else {
+                            <p title="This file is deleted" class="font-bold overflow-hidden whitespace-nowrap text-ellipsis text-red-400 animate-pulse">{{ fileInfo.filename }}</p>
+                        }
+                    } @else {
+                        <app-loading-data></app-loading-data>
+                    }
+                </div>
+
+                <div class="w-full flex flex-row justify-center items-center sm:justify-end sm:items-end  gap-3">
+                    @if (!fileInfo?.deleted) {
+                        <button title="Delete file" (click)="openDeleteAnalysisDialog()">
+                            <i class="fi fi-rr-trash text-lg p-2 text-red-400 rounded-md hover:bg-red-400/20 transition-all"></i>
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+
+                <div class="flex flex-col items-center justify-center p-5 bg-cell-membrane border border-soma-purple hover:border-blue-400 hover:bg-blue-400/20 rounded-xl transition-colors duration-200 ease-out">
+                    <div class="flex flex-row items-center gap-3 text-accent-foreground">
+                        <i class="fi fi-rr-sd-cards text-lg text-blue-400"></i>
+                        <p class="text-lg">Size</p>
+                    </div>
+                    @if (fileInfo) {
+                        <p class="text-lg text-accent-foreground font-bold">{{ fileInfo.size }} B</p>
+                    } @else {
+                        <app-loading-data></app-loading-data>
+                    }
+                </div>
+
+                <div class="flex flex-col items-center justify-center p-5 bg-cell-membrane border border-soma-purple hover:border-blue-400 hover:bg-blue-400/20 rounded-xl transition-colors duration-200 ease-out">
+                    <div class="flex flex-row items-center gap-3 text-accent-foreground">
+                        <i class="fi fi-rr-file-binary text-lg text-blue-400"></i>
+                        <p class="text-lg">Language</p>
+                    </div>
+                    @if (languageName) {
+                        <p class="text-lg text-accent-foreground font-bold">{{ languageName | removeUnderscore | titlecase }}</p>
+                    } @else {
+                        <app-loading-data></app-loading-data>
+                    }
+                </div>
+
+                <div class="flex flex-col items-center justify-center p-5 bg-cell-membrane border border-soma-purple hover:border-blue-400 hover:bg-blue-400/20 rounded-xl transition-colors duration-200 ease-out">
+                    <div class="flex flex-row items-center gap-3 text-accent-foreground">
+                        <i class="fi fi-rr-file-medical-alt text-lg text-blue-400"></i>
+                        <p class="text-lg">Analysis</p>
+                    </div>
+                    @if (analysisList) {
+                        <p class="text-lg text-accent-foreground font-bold">{{ analysisList.length }}</p>
+                    } @else {
+                        <app-loading-data></app-loading-data>
+                    }
+                </div>
+
+                <div class="flex flex-col items-center justify-center p-5 bg-cell-membrane border border-soma-purple hover:border-blue-400 hover:bg-blue-400/20 rounded-xl transition-colors duration-200 ease-out">
+                    <div class="flex flex-row items-center gap-3 text-accent-foreground">
+                        <i class="fi fi-rr-clock-three text-lg text-blue-400"></i>
+                        <p class="text-lg">Date</p>
+                    </div>
+                    @if (fileInfo) {
+                        <p class="text-lg text-accent-foreground font-bold">{{ fileInfo.upload_datetime | date:'dd/MM/yyyy HH:mm' }}</p>
+                    } @else {
+                        <app-loading-data></app-loading-data>
+                    }
+                </div>
+
+            </div>
+
+            @if (fileInfo) {
+                <div class="w-full">
+                    <app-code-viewer [code]="fileInfo.data"></app-code-viewer>
+                </div>
+            }
+
+            <div class="flex flex-col gap-3">
+                <p class="text-lg">{{ analysisList.length }} analysis</p>
+                @if (analysisList) {
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-150 overflow-y-auto">
+                        @for (result of analysisList; track result.id) {
+                            @if (result.status == ANALYSIS_STATUS.COMPLETED || result.status == ANALYSIS_STATUS.PARTIAL) {
+                                <app-analysis-completed [analysisPreview]="result"></app-analysis-completed>
+                            } @else if (result.status == ANALYSIS_STATUS.VALIDATING || result.status == ANALYSIS_STATUS.IN_PROGRESS) {
+                                <app-analysis-running [analysisPreview]="result"></app-analysis-running>
+                            } @else if (result.status == ANALYSIS_STATUS.FAILED) {
+                                <app-analysis-failed [analysisPreview]="result"></app-analysis-failed>
+                            }
+                        }
+                    </div>
+                } @else {
+                    <app-analysis-running [analysisPreview]="undefined"></app-analysis-running>
+                    <app-analysis-completed [analysisPreview]="undefined"></app-analysis-completed>
+                    <app-analysis-failed [analysisPreview]="undefined"></app-analysis-failed>
+                }
+            </div>
+        </div>
+
+    </section>
+    
+}

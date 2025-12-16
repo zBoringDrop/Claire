@@ -1,0 +1,194 @@
+<div class="w-full flex flex-col gap-4">
+
+    <form [formGroup]="settingsForm" (ngSubmit)="updateConfig()" class="flex flex-col gap-4 w-full">
+
+        <div class="flex flex-row items-center justify-between bg-dark-matter p-3 rounded-md">
+            <div class="flex flex-row items-center gap-2"
+                 [title]="OPTIONS.use_custom_config.description">
+                <i class="fi fi-rr-settings-sliders text-blue-400"></i>
+                <span class="font-bold text-gray-400">
+                    {{ OPTIONS.use_custom_config.label }}
+                </span>
+            </div>
+            <input type="checkbox" formControlName="use_custom_config" class="w-5 h-5 accent-blue-500 cursor-pointer">
+        </div>
+
+        <div class="flex flex-col gap-4">
+
+            <div class="flex flex-col gap-3 bg-dark-matter p-4 rounded-md">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fi fi-rr-blood-test-tube-alt text-purple-400"></i>
+                    <p class="text-lg font-bold text-gray-200">Sampling Parameters</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-4">
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.temperature.description">
+                            <span>{{ OPTIONS.temperature.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none transition-colors"
+                            type="number" step="0.1" formControlName="temperature" placeholder="0.1" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.top_k.description">
+                            <span>{{ OPTIONS.top_k.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="top_k" placeholder="40" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.top_p.description">
+                            <span>{{ OPTIONS.top_p.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" step="0.1" formControlName="top_p" placeholder="0.9" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.repeat_penalty.description">
+                            <span>{{ OPTIONS.repeat_penalty.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" step="0.1" formControlName="repeat_penalty" placeholder="1.1" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 bg-dark-matter p-4 rounded-md">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fi fi-rr-resources text-green-400"></i>
+                    <p class="text-lg font-bold text-gray-200">Resources & Dimensions</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-4">
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.num_ctx.description">
+                            <span>{{ OPTIONS.num_ctx.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="num_ctx" placeholder="4096" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.num_predict.description">
+                            <span>{{ OPTIONS.num_predict.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="num_predict" placeholder="-1" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.num_thread.description">
+                            <span>{{ OPTIONS.num_thread.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="num_thread" placeholder="8" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.keep_alive.description">
+                            <span>{{ OPTIONS.keep_alive.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="text" formControlName="keep_alive" placeholder="5m" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 bg-dark-matter p-4 rounded-md">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fi fi-rr-rocket-lunch text-red-400"></i>
+                    <p class="text-lg font-bold text-gray-200">Hardware Acceleration</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-4">
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.num_gpu.description">
+                            <span>{{ OPTIONS.num_gpu.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="num_gpu" placeholder="-1" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.main_gpu.description">
+                            <span>{{ OPTIONS.main_gpu.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="main_gpu" placeholder="0" required>
+                    </div>
+
+                    <div class="flex flex-col text-sm gap-1.5 items-center-safe justify-center-safe">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.use_mmap.description">
+                            <span>{{ OPTIONS.use_mmap.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        
+                        <div class="w-fit p-2 bg-gray-800 border border-gray-600 rounded-md h-[42px] flex items-center">
+                            <input type="checkbox" formControlName="use_mmap" class="w-5 h-5 accent-blue-500 cursor-pointer">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 bg-dark-matter p-4 rounded-md">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fi fi-rr-flask text-yellow-400"></i>
+                    <p class="text-lg font-bold text-gray-200">Advanced / Experimental</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-4">
+
+                    <div class="flex flex-col text-sm gap-1.5">
+                        <label class="flex flex-row items-center gap-2 text-gray-400 cursor-help"
+                            [title]="OPTIONS.seed.description">
+                            <span>{{ OPTIONS.seed.label }}</span>
+                            <i class="fi fi-rr-info text-xs text-gray-500"></i>
+                        </label>
+                        <input class="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded-md focus:border-blue-500 outline-none"
+                            type="number" formControlName="seed" placeholder="42" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-row flex-wrap justify-end gap-3">
+                <button (click)="resetDefaultValues()" type="button" class="px-6 py-2 bg-soma-dark2 border border-soma-dark hover:bg-soma-dark text-white font-semibold rounded-md transition-colors">
+                    Reset default
+                </button>
+
+                <button type="submit" class="px-6 py-2 bg-soma-dark2 border border-soma-dark hover:bg-soma-dark text-white font-semibold rounded-md transition-colors">
+                    Update
+                </button>
+            </div>
+
+        </div>
+
+    </form>
+</div>

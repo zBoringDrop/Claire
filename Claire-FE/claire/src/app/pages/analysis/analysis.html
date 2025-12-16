@@ -1,0 +1,79 @@
+<section class="w-full max-w-7xl mx-auto flex flex-col justify-center-safe items-center-safe p-10">
+
+    @let runningAnalysis = analysisInProgress();
+
+    @if (runningAnalysis.length > 0) {
+        <div class="w-full flex flex-col p-7 bg-cell-membrane border border-soma-purple rounded-2xl text-accent-foreground text-wrap">
+            <div class="flex flex-row mb-3 justify-start items-center-safe gap-3">
+                <i class="fi fi-rr-heart-rate text-pink-500 text-2xl animate-pulse"></i>
+                <div class="felx flex-col">
+                    <p class="text-md">Analysis in progress</p>
+                    <p class="text-xs">You have currently <span class="font-bold">{{ runningAnalysis.length }}</span> running analysis</p>
+                    <p class="text-xs text-gray-500">Running multiple analyses simultaneously may consume significant system resources depending on the selected configurations</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 text-gray-300 text-sm max-h-80 overflow-y-auto">
+                @for (analysis of runningAnalysis; track analysis.id) {
+                    <div (click)="navigateToAnalysisDeatailsPage(analysis.id)" class="flex flex-row gap-2 p-2 bg-dark-matter items-center-safe border rounded-md border-soma-dark2 text-sm cursor-pointer hover:border-soma-purple transition-colors duration-200 ease-out">
+                        <i class="fi fi-rr-file-code"></i>
+                        <span class="w-full"> {{ analysis.source_name }} </span>
+                        <span class="w-full"> {{ analysis.status | removeUnderscore }} </span>
+                        <span class="w-full text-xs animate-pulse"> {{ analysis.message }} </span>
+                    </div>
+                }
+            </div>
+            
+        </div>
+    }
+
+    <p class="p-10 text-accent-foreground text-3xl">Start a new analysis</p>
+
+    <form [formGroup]="analysisForm" (ngSubmit)="makeAnalysisRequest()" class="w-full h-fit justify-items-center-safe">
+
+        <div class="w-full flex flex-col gap-y-7">
+            <app-ai-selector [toolIdForm]="tool_id" [tool_name]="tool_name"></app-ai-selector>
+            <app-category-selector [categoryIdsForm]="analysis_categories" [analysis_category_ids]="analysis_category_ids" [analysis_categories_name]="analysis_categories_name"></app-category-selector>
+            <app-code-loader [source_id]="source_id" [source_title]="source_title" [source_isSnippet]="source_isSnippet"></app-code-loader>
+
+            @if (analysisForm.valid) {
+                <div class="flex flex-col gap-4 justify-center-safe items-center-safe">
+                    
+                    <div [class.opacity-50]="sendingAnalysis()" class="w-fit flex flex-row flex-wrap gap-2 justify-center-safe items-center-safe border border-green-600 rounded-md bg-green-700/40 p-3 cursor-default hover:border-green-500 hover:bg-green-700/80 transition-colors duration-200 ease-out">
+                        <i class="fi fi-rr-heart-rate text-green-500 animate-pulse"></i>
+                        <span class="text-accent-foreground font-bold">Ready to analyze source
+                            <span class="font-bold">{{ source_title.value }}</span>
+                        </span>
+                        <i class="fi fi-rr-bolt text-green-400 animate-pulse"></i>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        [disabled]="sendingAnalysis()" 
+                        class="font-bold text-accent-foreground w-full h-10 rounded-md cursor-pointer bg-linear-65 from-purple-500 to-pink-500 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-all">
+                        
+                        @if (sendingAnalysis()) {
+                            <span class="flex items-center gap-2">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Starting...
+                            </span>
+                        } @else {
+                            <span>Start analysis</span>
+                        }
+                        
+                    </button>
+                </div>
+            } @else {
+                <div class="flex flex-row flex-wrap gap-2 justify-center-safe items-center-safe border border-red-600 rounded-md bg-red-700/40 p-3 cursor-default hover:border-red-500 hover:bg-red-700/30 transition-colors duration-200 ease-out">
+                    <i class="fi fi-rr-exclamation text-red-500 animate-pulse"></i>
+                    <span class="text-accent-foreground font-bold">You have to select more information before starting an analysis</span>
+                </div>
+            }
+        </div>
+
+    </form>
+
+</section>
