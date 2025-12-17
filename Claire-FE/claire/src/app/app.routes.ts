@@ -15,19 +15,19 @@ import { FileDetails } from './pages/file-details/file-details';
 import { SnippetDetails } from './pages/snippet-details/snippet-details';
 
 export const routes: Routes = [
-
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
   {
     path: '',
     component: MainLayout,
+    canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
+      { path: 'dashboard', component: Dashboard },
 
       {
         path: 'analysis',
         children: [
-          { path: '', component: Analysis, canActivate: [authGuard] }
+          { path: '', component: Analysis }
         ]
       },
 
@@ -36,23 +36,23 @@ export const routes: Routes = [
       { 
         path: 'history', 
         children: [
-          { path: '', component: History, canActivate: [authGuard] },
+          { path: '', component: History },
           { path: 'details/:id', component: AnalysisDetails }
         ]
       },
       
-      { path: 'stats', component: Dashboard, canActivate: [authGuard] },
+      { path: 'stats', component: Dashboard },
 
       { 
         path: 'sources', 
         children: [
-          { path: '', component: Sources, canActivate: [authGuard] },
+          { path: '', component: Sources },
           { path: 'file/:id', component: FileDetails },
           { path: 'snippet/:id', component: SnippetDetails }
         ]
       },
 
-      { path: 'settings', component: Settings, canActivate: [authGuard] },
+      { path: 'settings', component: Settings },
     ]
   },
 
