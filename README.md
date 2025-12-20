@@ -67,14 +67,12 @@ Ensure you have the following installed on your machine:
 * **Git**
 * *(Optional)* **Ollama** running locally for local AI inference.
 
----
-
 ### 1. Clone the Repository
 
 Open your terminal and clone the project:
 
 ```bash
-git clone [https://github.com/zBoringDrop/Claire.git](https://github.com/zBoringDrop/Claire.git)
+git clone https://github.com/zBoringDrop/Claire.git
 cd Claire
 ```
 
@@ -157,7 +155,6 @@ The application will be available at http://localhost:4200.
 * **Cancelling analysis in progress:** It is not yet possible to cancel an analysis while it is in progress. Be careful before starting one!
 * **Dashboard page:** After logging in, you will be directed to a dashboard that has not yet been implemented.
 * **Stats page:** The statistics section ('stats') has not yet been implemented.
-* **Themes:** add a light theme and a dark theme
 
 ---
 
