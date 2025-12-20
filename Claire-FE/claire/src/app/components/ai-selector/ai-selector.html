@@ -1,6 +1,6 @@
 <div class="w-full flex flex-col p-7 bg-dark-matter border gap-5 border-soma-dark2 rounded-2xl text-accent-foreground text-wrap">
     <div class="flex flex-row justify-start items-center-safe gap-3">
-        <div class="rounded-full w-10 h-10 bg-pink-600 flex justify-center-safe items-center-safe">
+        <div class="rounded-full w-10 h-10 bg-accent1 text-white flex justify-center-safe items-center-safe">
             <p>1</p>
         </div>
         <div class="flex flex-col">
@@ -19,10 +19,10 @@
                 <input [formControl]="searchModelInput" title="Search model" type="search" placeholder="Search a model by name or specific setting" class="w-full text-sm text-gray-400 px-2 py-1 bg-cell-membrane border border-soma-dark2 rounded-md focus:outline-0 focus:border-soma-purple hover:border-soma-dark transition-colors duration-200 ease-out">
                 
                 <button title="Reset" (click)="resetSearchInput()">
-                    <i class="fi fi-rr-cross text-lg text-white/40 hover:text-white transition-colors duration-200 ease-out"></i>
+                    <i class="fi fi-rr-cross text-lg text-accent-foreground hover:text-accent-foreground/50 transition-colors duration-200 ease-out"></i>
                 </button>
                 <button title="Resync models" (click)="resyncModels()">
-                    <i class="fi fi-rr-rotate-right text-lg text-white/40 hover:text-white transition-colors duration-200 ease-out"></i>
+                    <i class="fi fi-rr-rotate-right text-lg text-accent-foreground hover:text-accent-foreground/50 transition-colors duration-200 ease-out"></i>
                 </button>
             </div>
 

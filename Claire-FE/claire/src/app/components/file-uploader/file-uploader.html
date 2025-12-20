@@ -1,10 +1,10 @@
 <form>
     <div class="flex flex-col gap-3 w-full border-2 text-gray-300 p-5 items-center-safe border-soma-dark border-dashed rounded-xl bg-cell-membrane hover:border-soma-purple transition-colors duration-200 ease-out">
-        <i class="fi fi-rr-cloud text-5xl text-purple-400"></i>
+        <i class="fi fi-rr-cloud text-5xl text-accent-foreground"></i>
         <p>Load file</p>
         <p class="text-xs">The file will be uploaded to the server and saved for future analysis</p>
         <label for="file-upload" class="flex flex-row border rounded-md border-soma-purple cursor-pointer text-center p-2 hover:bg-soma-dark2 transition-colors duration-200 ease-out">
-            <i class="fi fi-rr-file-upload pr-3 text-sm text-purple-400"></i>
+            <i class="fi fi-rr-file-upload pr-3 text-sm text-accent-foreground"></i>
             @if (selectedFile) {
                 <span class="text-sm">{{ selectedFile.name }}</span>
             } @else {

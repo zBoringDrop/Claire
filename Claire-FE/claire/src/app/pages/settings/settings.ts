@@ -6,10 +6,11 @@ import { ProblemDetails } from '../../types/problemdetails';
 import { ProviderApiUpdate } from "../../components/provider-api-update/provider-api-update";
 import { FormsModule } from "@angular/forms";
 import { OllamaConfigurator } from "../../components/ollama-configurator/ollama-configurator";
+import { ThemeSelector } from "../../components/theme-selector/theme-selector";
 
 @Component({
   selector: 'app-settings',
-  imports: [ProviderApiUpdate, FormsModule, OllamaConfigurator],
+  imports: [ProviderApiUpdate, FormsModule, OllamaConfigurator, ThemeSelector],
   templateUrl: './settings.html',
   styleUrl: './settings.css'
 })

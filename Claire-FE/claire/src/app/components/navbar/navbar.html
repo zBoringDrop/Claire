@@ -1,10 +1,14 @@
-<nav class="bg-soma-dark2 text-accent-foreground text-sm font-semibold p-5 border-b-1 border-soma-purple top-0 sticky z-50">
+<nav class="bg-soma-dark2 text-accent-foreground text-sm font-semibold p-5 border-b border-soma-purple top-0 sticky z-50">
     <div class="flex flex-col sm:flex-row">
 
         <div class="flex flex-row items-center-safe gap-3">
-            <div class="w-full justify-start items-center-safe flex flex-row">
-                <div class="p-5 bg-[url(/assets/imgs/brain.png)] bg-no-repeat bg-contain"></div>
-                <p class="text-2xl p-2">Claire</p>
+            <div class="justify-start items-center-safe flex flex-row">
+            
+                <div class="w-14 aspect-square flex items-center justify-center border border-accent1 rounded-full bg-linear-to-r from-purple-500/30 to-pink-500/30">
+                    <i class="fi fi-rr-brain-circuit text-3xl text-accent1 animate-pulse"></i>
+                </div>
+
+                <h1 class="text-2xl px-3 font-bold bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-pink-500">Claire</h1>
             </div>
             <div (click)="toggleMenu()" class="flex justify-end-safe w-full sm:hidden">
                 <div class="p-2 cursor-pointer rounded-xl hover:bg-soma-purple/30">
@@ -17,10 +21,10 @@
             @for (item of options; track item.title) {
                 <li>
                     <a [routerLink]="item.link" 
-                        routerLinkActive="bg-soma-purple/30"
-                        class="flex flex-row justify-center-safe items-center-safe p-3 gap-1 rounded-xl hover:bg-soma-purple/30 cursor-pointer transition-colors duration-200 ease-out">
+                        routerLinkActive="bg-accent1/30"
+                        class="flex flex-row justify-center-safe items-center-safe p-3 gap-1 rounded-xl hover:bg-accent1/30 cursor-pointer transition-colors duration-200 ease-out">
                         
-                        <i class="fi text-xs text-white" [ngClass]="[item.img]"></i>
+                        <i class="fi text-xs text-accent-foreground" [ngClass]="[item.img]"></i>
                         <span>{{ item.title }}</span>
                     </a>
                 </li>

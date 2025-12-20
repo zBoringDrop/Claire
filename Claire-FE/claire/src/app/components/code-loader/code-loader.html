@@ -1,6 +1,6 @@
 <div class="w-full flex flex-col gap-5 p-7 bg-dark-matter border border-soma-dark2 rounded-2xl text-accent-foreground text-wrap">
     <div class="flex flex-row justify-start items-center-safe gap-3">
-        <div class="rounded-full w-10 h-10 bg-pink-600 flex justify-center-safe items-center-safe">
+        <div class="rounded-full w-10 h-10 bg-accent1 text-white flex justify-center-safe items-center-safe">
             <p>3</p>
         </div>
         <div class="felx flex-col">
@@ -16,7 +16,7 @@
                 'bg-soma-dark': option.clicked,
                 'bg-dark-matter-light': !option.clicked
             }">
-                <i class="fi text-sm text-purple-400" [ngClass]="option.icon"></i>
+                <i class="fi text-sm text-accent-foreground" [ngClass]="option.icon"></i>
                 <span>{{ option.title }}</span>
             </div>
         }

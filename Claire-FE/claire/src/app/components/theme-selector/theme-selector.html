@@ -1,0 +1,11 @@
+<div class="flex flex-col gap-1.5">
+    @let themes = themesList();
+    @let actual = actualTheme();
+
+    <p class="font-bold">Theme</p>
+    <select (change)="onThemeChange($event)" class="bg-cell-membrane p-2 text-accent-foreground border border-gray-600 rounded-md">
+        @for (theme of themes; track theme; let i = $index) {
+            <option [value]="i" [selected]="actual === theme">{{ theme.substring(6)| removeHyphenPipe | titlecase }}</option>
+        }
+    </select>
+</div>
