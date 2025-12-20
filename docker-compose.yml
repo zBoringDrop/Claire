@@ -36,14 +36,17 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/claire-db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      OLLAMA_BASE_URL: http://ollama:11434
-      OLLAMA_PROVIDER_URL: http://ollama:11434
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
+      OLLAMA_BASE_URL: ${OLLAMA_URL}
+      OLLAMA_PROVIDER_URL: ${OLLAMA_URL}
+
       LMSTUDIO_PROVIDER_URL: "http://dummy-host:1234"
       LOCALAI_PROVIDER_URL: "http://dummy-host:8080"
-      ENCRYPTION_PASSWORD: "Dq9sNIC4$Dq9sNIC4U7q!Ok8UE&!$*vp%bj4kuWKvOsxpb3KzZlTMKygDVo2qrFq*U7q*IYaVFAy$$IdEk&^f%@&%" 
-      ENCRYPTION_SALT: "a1aa0ef5f2ccded64bca5a7e6db6e8ee" 
+
+      ENCRYPTION_PASSWORD: ${ENCRYPTION_PASSWORD}
+      ENCRYPTION_SALT: ${ENCRYPTION_SALT}
     depends_on:
       db:
         condition: service_healthy
