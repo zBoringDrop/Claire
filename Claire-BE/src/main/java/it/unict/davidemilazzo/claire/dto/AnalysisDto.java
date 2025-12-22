@@ -22,6 +22,7 @@ public class AnalysisDto {
     private Long codeSnippetId;
     private Long toolId;
     private List<Long> analysisCategoryIds;
+    private boolean useCot;
     private LocalDateTime endDatetime;
     private Long executionMs;
     private Byte overallSeverity;
@@ -38,6 +39,7 @@ public class AnalysisDto {
                        @JsonProperty("codesnippet_id") Long codeSnippetId,
                        @JsonProperty("tool_id") Long toolId,
                        @JsonProperty("analysis_categoryIds") List<Long> analysisCategoryIds,
+                       @JsonProperty("use_cot") boolean useCot,
                        @JsonProperty("end_datetime") LocalDateTime endDatetime,
                        @JsonProperty("execution_ms") Long executionMs,
                        @JsonProperty("overall_severity") Byte overallSeverity,
@@ -53,6 +55,7 @@ public class AnalysisDto {
         this.codeSnippetId = codeSnippetId;
         this.toolId = toolId;
         this.analysisCategoryIds = analysisCategoryIds;
+        this.useCot = useCot;
         this.resultJson = resultJson;
         this.endDatetime = endDatetime;
         this.executionMs = executionMs;

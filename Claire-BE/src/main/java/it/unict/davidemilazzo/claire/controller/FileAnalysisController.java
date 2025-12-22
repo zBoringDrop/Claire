@@ -71,8 +71,8 @@ public class FileAnalysisController {
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         Long userId = userEntity.getId();
 
-        log.info("[POST /fileanalysis/analyze] Request received from userId={} for fileId={}",
-                userId, analysisRequestDto.getSourceId());
+        log.info("[POST /fileanalysis/analyze] Request received from userId={}: {}",
+                userId, analysisRequestDto.toString());
 
         AnalysisDto analysisDto = analysisService.asyncAnalyzeFile(analysisRequestDto, userId);
 

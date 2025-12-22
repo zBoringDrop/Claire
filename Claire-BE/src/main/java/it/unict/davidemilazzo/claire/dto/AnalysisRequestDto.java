@@ -13,14 +13,17 @@ public class AnalysisRequestDto {
     private Long sourceId; //codeSnippetId or fileId
     private Long toolId;
     private Set<Long> analysisCategoryIds;
+    private boolean useCot;
 
     @JsonCreator
     public AnalysisRequestDto(@JsonProperty("source_id") Long sourceId,
                               @JsonProperty("tool_id") Long toolId,
-                              @JsonProperty("analysis_categories") Set<Long> analysisCategoryIds) {
+                              @JsonProperty("analysis_categories") Set<Long> analysisCategoryIds,
+                              @JsonProperty("use_cot") boolean useCot) {
 
         this.sourceId = sourceId;
         this.toolId = toolId;
         this.analysisCategoryIds = analysisCategoryIds;
+        this.useCot = useCot;
     }
 }

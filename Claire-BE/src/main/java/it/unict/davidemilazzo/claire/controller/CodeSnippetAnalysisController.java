@@ -73,8 +73,8 @@ public class CodeSnippetAnalysisController {
         UserEntity userEntity = (UserEntity) authentication.getPrincipal();
         Long userId = userEntity.getId();
 
-        log.info("[POST /codesnippet/analyze] Request received from userId={} for snippetId={}",
-                userId, analysisRequestDto.getSourceId());
+        log.info("[POST /codesnippet/analyze] Request received from userId={}: {}",
+                userId, analysisRequestDto.toString());
 
         AnalysisDto analysisDto = analysisService.asyncAnalyzeCodeSnippet(analysisRequestDto, userId);
 

@@ -44,8 +44,7 @@ public class AnalysisController {
     @Tag(name = "analysis")
     @Operation(summary = "Get a specific user analysis")
     @GetMapping("/{analysisId}")
-    ResponseEntity<AnalysisDto> getAnalysis(@PathVariable Long analysisId,
-                                            Authentication authentication) {
+    ResponseEntity<AnalysisDto> getAnalysis(@PathVariable Long analysisId) {
 
         log.info("[GET /analysis/{}] Request received", analysisId);
 
@@ -59,8 +58,7 @@ public class AnalysisController {
     @Tag(name = "analysis")
     @Operation(summary = "Delete a specific analysis")
     @DeleteMapping("/delete/{analysisId}")
-    ResponseEntity<AnalysisDto> deleteAnalysis(@PathVariable Long analysisId,
-                                               Authentication authentication) {
+    ResponseEntity<AnalysisDto> deleteAnalysis(@PathVariable Long analysisId) {
 
         log.info("[DELETE /analysis/delete/{}] Request received", analysisId);
 

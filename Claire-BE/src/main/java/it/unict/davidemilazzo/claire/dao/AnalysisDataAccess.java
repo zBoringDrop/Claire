@@ -26,8 +26,8 @@ public class AnalysisDataAccess implements AnalysisDao {
     @Override
     public AnalysisDto createNew(AnalysisDto analysisDto) {
         AnalysisEntity analysisEntity = AnalysisMapper.INSTANCE.toEntity(analysisDto);
-        log.info("Dto: {}", analysisDto.toString());
-        log.info("Enityt: {}", analysisEntity.getCreatedAt());
+        //log.info("Dto: {}", analysisDto.toString());
+        //log.info("Entity: {}", analysisEntity.getCreatedAt());
         return AnalysisMapper.INSTANCE.toDto(analysisEntityRepository.save(analysisEntity));
     }
 
@@ -87,6 +87,8 @@ public class AnalysisDataAccess implements AnalysisDao {
         if (analysisDto.getCreatedAt() != null) {
             analysisEntityToUpdate.setCreatedAt(analysisDto.getCreatedAt());
         }
+
+        analysisEntityToUpdate.setUseCot(analysisDto.isUseCot());
 
         return AnalysisMapper.INSTANCE.toDto(analysisEntityRepository.save(analysisEntityToUpdate));
     }

@@ -55,10 +55,11 @@ public class AnalysisService {
     }
 
     @Transactional
-    public AnalysisDto initializeNew(AnalysisStatus status) {
+    public AnalysisDto initializeNew(AnalysisStatus status, AnalysisRequestDto analysisRequestDto) {
         AnalysisDto analysisDto = new AnalysisDto();
         analysisDto.setCreatedAt(LocalDateTime.now());
         analysisDto.setStatus(status);
+        analysisDto.setUseCot(analysisRequestDto.isUseCot());
         return createNew(analysisDto);
     }
 
@@ -193,7 +194,7 @@ public class AnalysisService {
 
     public AnalysisDto asyncAnalyzeCodeSnippet(AnalysisRequestDto analysisRequestDto,
                                                 Long userId) {
-        AnalysisDto analysisDto = initializeNew(AnalysisStatus.VALIDATING);
+        AnalysisDto analysisDto = initializeNew(AnalysisStatus.VALIDATING, analysisRequestDto);
 
         applicationContext.getBean(AnalysisService.class)
                 .analyzeCodeSnippet(analysisRequestDto, userId, analysisDto.getId());
@@ -203,7 +204,7 @@ public class AnalysisService {
 
     public AnalysisDto asyncAnalyzeFile(AnalysisRequestDto analysisRequestDto,
                                         Long userId) {
-        AnalysisDto analysisDto = initializeNew(AnalysisStatus.VALIDATING);
+        AnalysisDto analysisDto = initializeNew(AnalysisStatus.VALIDATING, analysisRequestDto);
 
         applicationContext.getBean(AnalysisService.class).
                 analyzeFile(analysisRequestDto, userId, analysisDto.getId());
@@ -236,13 +237,14 @@ public class AnalysisService {
                     .codeSnippetId(codeSnippetDto.getId())
                     .toolId(aiDto.getId())
                     .analysisCategoryIds(extractCategoryIds(analysisCategoryDtos))
+                    .useCot(analysisRequestDto.isUseCot())
                     .resultJson(null)
                     .createdAt(null)
                     .build());
 
             List<PromptGenerationResult> prompts =
                     SpecializedAnalysisPrompts.getPromptsByCategory(extractCategoryTypes(analysisCategoryDtos),
-                            codeSnippetDto.getCodeText());
+                            codeSnippetDto.getCodeText(), analysisRequestDto.isUseCot());
 
             Instant startTime = Instant.now();
             List<ObjectNode> results = startAnalysisForEachCategory(prompts, null, aiDto, aiAnalyzer, analysisId, aiConfig);
@@ -268,6 +270,7 @@ public class AnalysisService {
                     .codeSnippetId(codeSnippetDto.getId())
                     .toolId(aiDto.getId())
                     .analysisCategoryIds(extractCategoryIds(analysisCategoryDtos))
+                    .useCot(analysisRequestDto.isUseCot())
                     .createdAt(null)
                     .endDatetime(LocalDateTime.ofInstant(endTime, ZoneId.of("Europe/Rome")))
                     .executionMs(executionMs)
@@ -285,6 +288,7 @@ public class AnalysisService {
                     .codeSnippetId(analysisRequestDto.getSourceId())
                     .toolId(analysisRequestDto.getToolId())
                     .analysisCategoryIds(null)
+                    .useCot(analysisRequestDto.isUseCot())
                     .resultJson(null)
                     .createdAt(null)
                     .issuesCount(null)
@@ -319,6 +323,7 @@ public class AnalysisService {
                     .codeSnippetId(null)
                     .toolId(aiDto.getId())
                     .analysisCategoryIds(extractCategoryIds(analysisCategoryDtos))
+                    .useCot(analysisRequestDto.isUseCot())
                     .resultJson(null)
                     .createdAt(null)
                     .build());
@@ -334,7 +339,7 @@ public class AnalysisService {
 
             for (int i=0; i<codeSnippets.size(); i++) {
                 log.info("Analizing snippet {}/{}", i, codeSnippets.size());
-                prompts = SpecializedAnalysisPrompts.getPromptsByCategory(analysisCategoryTypes, codeSnippets.get(i));
+                prompts = SpecializedAnalysisPrompts.getPromptsByCategory(analysisCategoryTypes, codeSnippets.get(i), analysisRequestDto.isUseCot());
 
                 List<ObjectNode> results = startAnalysisForEachCategory(prompts, foundIssues, aiDto, aiAnalyzer, analysisId, aiConfig);
                 log.info("Results {}", results);
@@ -374,6 +379,7 @@ public class AnalysisService {
                     .codeSnippetId(null)
                     .toolId(aiDto.getId())
                     .analysisCategoryIds(extractCategoryIds(analysisCategoryDtos))
+                    .useCot(analysisRequestDto.isUseCot())
                     .createdAt(null)
                     .endDatetime(LocalDateTime.ofInstant(endTime, ZoneId.of("Europe/Rome")))
                     .executionMs(executionMs)
@@ -392,6 +398,7 @@ public class AnalysisService {
                     .codeSnippetId(null)
                     .toolId(null)
                     .analysisCategoryIds(null)
+                    .useCot(analysisRequestDto.isUseCot())
                     .resultJson(null)
                     .createdAt(null)
                     .issuesCount(null)

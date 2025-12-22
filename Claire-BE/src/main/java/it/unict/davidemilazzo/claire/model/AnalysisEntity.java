@@ -50,6 +50,9 @@ public class AnalysisEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<AnalysisCategoryEntity> categories;
 
+    @Column(name = "use_cot", nullable = false)
+    private boolean useCot;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
