@@ -287,7 +287,8 @@ export class AnalysisDetails {
     const request: AnalysisRequest = {
       source_id: this.file()!.id,
       tool_id: this.tool()!.ai_id,
-      analysis_categories: categoryIds
+      analysis_categories: categoryIds,
+      use_cot: this.analysis()!.use_cot
     }
 
     console.log("Request a re-analyze of this same file analysis: ", request)
@@ -317,7 +318,8 @@ export class AnalysisDetails {
     const request: AnalysisRequest = {
       source_id: this.snippet()!.id,
       tool_id: this.tool()!.ai_id,
-      analysis_categories: categoryIds
+      analysis_categories: categoryIds,
+      use_cot: this.analysis()!.use_cot
     }
 
     console.log("Request a re-analyze of this same snippet analysis: ", request)
