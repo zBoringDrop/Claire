@@ -8,18 +8,19 @@ export interface AnalysisPreview {
     codesnippet_id: number | null | undefined;
     source_name: string;
     source_preview: string | null;
-    source_deleted: boolean | null
+    source_deleted: boolean | null;
     tool_name: string;
     overall_severity: number;
     issues_count: number;
     categories: string[];
-    created_at: Date;
+    created_at: Date
 }
 
 export interface AnalysisRequest {
     source_id: number,
     tool_id: number,
-    analysis_categories: number[]
+    analysis_categories: number[],
+    use_cot: boolean
 }
 
 // Issue generico
@@ -55,18 +56,18 @@ export interface AnalysisMeta {
   input_length: number;
 }
 
-// Response per ogni categoria
-export interface AnalysisResponse {
-  overall_severity: number;
-  issues: AnalysisIssue[];
-}
-
 // Oggetto dentro result_json
 export interface AnalysisResultItem {
   meta: AnalysisMeta;
-  response: AnalysisResponse;
   output_length: number;
   status: string;
+  response: AnalysisResponse;
+}
+
+export interface AnalysisResponse {
+    thought_process: string;
+    overall_severity: number;
+    issues: AnalysisIssue[];
 }
 
 // Analisi completa
@@ -85,6 +86,7 @@ export interface AnalysisSchema {
   overall_severity: number;
   result_json: AnalysisResultWrapper; 
   analysis_categoryIds?: number[];
+  use_cot: boolean;
 }
 
 export interface AnalysisResultWrapper {

@@ -40,7 +40,8 @@ export class Analysis {
     analysis_category_ids: this.formBuilder.nonNullable.control<string[]>([], [Validators.required]),
     source_id: this.formBuilder.nonNullable.control('', [Validators.required]),
     source_title: this.formBuilder.nonNullable.control('', [Validators.required]),
-    source_isSnippet: this.formBuilder.nonNullable.control(null, [Validators.required])
+    source_isSnippet: this.formBuilder.nonNullable.control(null, [Validators.required]),
+    use_cot: this.formBuilder.nonNullable.control(true)
   });
 
   ngOnInit() {
@@ -93,6 +94,10 @@ export class Analysis {
     return this.analysisForm.get('source_isSnippet') as FormControl<boolean | null>;
   }
 
+  get use_cot(): FormControl<boolean> {
+    return this.analysisForm.get('use_cot') as FormControl<boolean>;
+  }
+
   makeAnalysisRequest() {
     this.sendingAnalysis.set(true)
 
@@ -103,9 +108,10 @@ export class Analysis {
     }
 
     const analysisRequest: AnalysisRequest = {
-      tool_id: parseInt(this.tool_id.value),
+      source_id: Number(this.source_id.value),
+      tool_id: Number(this.tool_id.value),
       analysis_categories: this.analysis_category_ids.value.map(Number),
-      source_id: parseInt(this.source_id.value)
+      use_cot: Boolean(this.use_cot.value)
     }
 
     console.log("Analysis request: ", analysisRequest)

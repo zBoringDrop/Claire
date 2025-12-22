@@ -36,11 +36,31 @@
             <app-category-selector [categoryIdsForm]="analysis_categories" [analysis_category_ids]="analysis_category_ids" [analysis_categories_name]="analysis_categories_name"></app-category-selector>
             <app-code-loader [source_id]="source_id" [source_title]="source_title" [source_isSnippet]="source_isSnippet"></app-code-loader>
 
+            <div class="w-full flex flex-col p-7 bg-dark-matter border gap-5 border-soma-dark2 rounded-2xl text-accent-foreground text-wrap">
+                <div class="flex flex-row justify-start items-center-safe gap-3">
+                    <div class="rounded-full w-10 h-10 bg-accent1 text-white flex justify-center-safe items-center-safe">
+                        <p>4</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-md">Other options</p>
+                        <p class="text-xs">Define extra analysis parameters</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-60 overflow-y-auto">
+                    <div class="flex flex-row items-center bg-cell-membrane p-2 gap-3 rounded-md border border-cell-membrane hover:border-soma-dark2 transition-all">
+                        <i title="Enables step-by-step reasoning to improve accuracy and reduce false positives. It provides a transparent logical breakdown of the analysis with a slight increase in latency. If the chosen model already offers thinking, this should be considered as further reasoning." 
+                            class="fi fi-rr-interrogation text-accent1 hover:cursor-help"></i>
+                        <p>Chain-of-Thought</p>
+                        <input class="cursor-pointer" [formControl]="use_cot" type="checkbox">
+                    </div>
+                </div>
+            </div>
+
             @if (analysisForm.valid) {
                 <div class="flex flex-col gap-4 justify-center-safe items-center-safe">
                     
-                    <div [class.opacity-50]="sendingAnalysis()" class="w-fit flex flex-row flex-wrap gap-2 justify-center-safe items-center-safe border border-green-600 rounded-md bg-green-700/40 p-3 cursor-default hover:border-green-500 hover:bg-green-700/80 transition-colors duration-200 ease-out">
-                        <i class="fi fi-rr-heart-rate text-green-500 animate-pulse"></i>
+                    <div [class.opacity-50]="sendingAnalysis()" class="w-fit flex flex-row flex-wrap gap-2 justify-center-safe items-center-safe border border-green-600 rounded-md bg-green-700/40 p-3 cursor-default hover:border-green-500 hover:bg-green-300/80 transition-colors duration-200 ease-out">
+                        <i class="fi fi-rr-heart-rate text-green-400 animate-pulse"></i>
                         <span class="text-accent-foreground font-bold">Ready to analyze source
                             <span class="font-bold">{{ source_title.value }}</span>
                         </span>
